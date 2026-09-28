@@ -64,18 +64,18 @@ CREATE POLICY user_settings_by_user_id
 -- activation state, or read migration metadata.
 DO $$
 BEGIN
-  IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'mylife_app') THEN
-    REVOKE ALL ON TABLE users FROM mylife_app;
-    REVOKE ALL ON TABLE sessions FROM mylife_app;
-    REVOKE ALL ON TABLE user_settings FROM mylife_app;
-    REVOKE ALL ON TABLE login_throttle FROM mylife_app;
-    REVOKE ALL ON TABLE schema_migrations FROM mylife_app;
+  IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'way_of_life_app') THEN
+    REVOKE ALL ON TABLE users FROM way_of_life_app;
+    REVOKE ALL ON TABLE sessions FROM way_of_life_app;
+    REVOKE ALL ON TABLE user_settings FROM way_of_life_app;
+    REVOKE ALL ON TABLE login_throttle FROM way_of_life_app;
+    REVOKE ALL ON TABLE schema_migrations FROM way_of_life_app;
 
-    GRANT SELECT (id, email, password_hash, is_active) ON users TO mylife_app;
-    GRANT UPDATE (last_login_at, updated_at) ON users TO mylife_app;
-    GRANT SELECT, INSERT, DELETE ON sessions TO mylife_app;
-    GRANT SELECT, INSERT, UPDATE, DELETE ON user_settings TO mylife_app;
-    GRANT SELECT, INSERT, UPDATE, DELETE ON login_throttle TO mylife_app;
+    GRANT SELECT (id, email, password_hash, is_active) ON users TO way_of_life_app;
+    GRANT UPDATE (last_login_at, updated_at) ON users TO way_of_life_app;
+    GRANT SELECT, INSERT, DELETE ON sessions TO way_of_life_app;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON user_settings TO way_of_life_app;
+    GRANT SELECT, INSERT, UPDATE, DELETE ON login_throttle TO way_of_life_app;
   END IF;
 END
 $$;

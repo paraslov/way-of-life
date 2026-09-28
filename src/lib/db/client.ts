@@ -2,7 +2,7 @@ import "server-only";
 
 import { Pool, type PoolClient, type QueryResultRow } from "pg";
 
-const globalForDatabase = globalThis as unknown as { mylifePool?: Pool };
+const globalForDatabase = globalThis as unknown as { wayOfLifePool?: Pool };
 let runtimeRoleCheck: Promise<void> | undefined;
 
 type RuntimeRoleRow = {
@@ -27,11 +27,11 @@ function createPool() {
 }
 
 export function getPool() {
-  if (!globalForDatabase.mylifePool) {
-    globalForDatabase.mylifePool = createPool();
+  if (!globalForDatabase.wayOfLifePool) {
+    globalForDatabase.wayOfLifePool = createPool();
   }
 
-  return globalForDatabase.mylifePool;
+  return globalForDatabase.wayOfLifePool;
 }
 
 async function assertSafeRuntimeRole(pool: Pool) {

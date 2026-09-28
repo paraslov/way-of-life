@@ -11,7 +11,7 @@ import { withCurrentUserDb } from "@/lib/db/user-context";
 export const USER_DATA_TABLES = ["user_settings"] as const;
 
 export type UserDataExport = {
-  format: "mylife-export";
+  format: "way-of-life-export";
   version: 1;
   exportedAt: string;
   tables: Record<(typeof USER_DATA_TABLES)[number], unknown[]>;
@@ -25,7 +25,7 @@ export async function exportUserData(): Promise<UserDataExport> {
       tables[table] = (await client.query(`SELECT * FROM ${table}`)).rows;
     }
     return {
-      format: "mylife-export",
+      format: "way-of-life-export",
       version: 1,
       exportedAt: new Date().toISOString(),
       tables,

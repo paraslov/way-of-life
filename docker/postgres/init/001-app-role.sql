@@ -1,8 +1,8 @@
 -- POSTGRES_USER creates the migration/administration role. Next.js must never
 -- connect as that role because PostgreSQL superusers bypass RLS.
-CREATE ROLE mylife_app
+CREATE ROLE way_of_life_app
   LOGIN
-  PASSWORD 'mylife_app_local_password'
+  PASSWORD 'way_of_life_app_local_password'
   NOSUPERUSER
   NOCREATEDB
   NOCREATEROLE
@@ -10,5 +10,5 @@ CREATE ROLE mylife_app
   NOREPLICATION
   NOBYPASSRLS;
 
-GRANT CONNECT ON DATABASE mylife TO mylife_app;
-GRANT USAGE ON SCHEMA public TO mylife_app;
+GRANT CONNECT ON DATABASE way_of_life TO way_of_life_app;
+GRANT USAGE ON SCHEMA public TO way_of_life_app;

@@ -89,7 +89,7 @@ if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
 }
 
 const password =
-  process.env.MYLIFE_NEW_USER_PASSWORD ??
+  process.env.WAY_OF_LIFE_NEW_USER_PASSWORD ??
   (await promptForPassword("Password: "));
 
 // Health data lives behind this password: no MFA yet, so require length.

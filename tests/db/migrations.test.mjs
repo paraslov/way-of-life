@@ -15,7 +15,7 @@ test(
     assert.ok(process.env.DATABASE_ADMIN_URL, "Set DATABASE_ADMIN_URL");
     const schema = `migration_test_${randomUUID().replaceAll("-", "")}`;
     const directory = await mkdtemp(
-      path.join(os.tmpdir(), "mylife-migrations-"),
+      path.join(os.tmpdir(), "way-of-life-migrations-"),
     );
     const first = new pg.Client({
       connectionString: process.env.DATABASE_ADMIN_URL,

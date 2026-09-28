@@ -1,7 +1,7 @@
 # 00 — Контент v6: концепции и defaults
 
 **Версия:** V0 · **Статус:** 🟡 · **Зависит от:** — · **Обновлён:** 28.09.2026
-Мастер-план: [mylife-plan.md](../mylife-plan.md) · Архитектура: [architecture.md](../architecture.md)
+Мастер-план: [way-of-life-plan.md](../way-of-life-plan.md) · Архитектура: [architecture.md](../architecture.md)
 
 ## Чек-лист
 

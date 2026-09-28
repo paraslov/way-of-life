@@ -17,8 +17,8 @@ export type CurrentUser = SessionUserRow;
 
 function sessionCookieName() {
   return process.env.NODE_ENV === "production"
-    ? "__Host-mylife_session"
-    : "mylife_session";
+    ? "__Host-way_of_life_session"
+    : "way_of_life_session";
 }
 
 function hashSessionToken(token: string) {

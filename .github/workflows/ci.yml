@@ -38,21 +38,21 @@ jobs:
     timeout-minutes: 10
     services:
       postgres:
-        image: postgres:16-alpine
+        image: postgres:17-alpine
         env:
-          POSTGRES_DB: mylife
-          POSTGRES_USER: mylife_admin
-          POSTGRES_PASSWORD: mylife_admin_local_password
+          POSTGRES_DB: way_of_life
+          POSTGRES_USER: way_of_life_admin
+          POSTGRES_PASSWORD: way_of_life_admin_local_password
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U mylife_admin -d mylife"
+          --health-cmd "pg_isready -U way_of_life_admin -d way_of_life"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
     env:
-      DATABASE_ADMIN_URL: postgresql://mylife_admin:mylife_admin_local_password@localhost:5432/mylife
-      DATABASE_URL: postgresql://mylife_app:mylife_app_local_password@localhost:5432/mylife
+      DATABASE_ADMIN_URL: postgresql://way_of_life_admin:way_of_life_admin_local_password@localhost:5432/way_of_life
+      DATABASE_URL: postgresql://way_of_life_app:way_of_life_app_local_password@localhost:5432/way_of_life
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v5

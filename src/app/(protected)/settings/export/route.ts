@@ -11,7 +11,7 @@ export async function GET() {
   return new Response(JSON.stringify(data, null, 2), {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      "Content-Disposition": `attachment; filename="mylife-export-${day}.json"`,
+      "Content-Disposition": `attachment; filename="way-of-life-export-${day}.json"`,
       "Cache-Control": "no-store",
     },
   });

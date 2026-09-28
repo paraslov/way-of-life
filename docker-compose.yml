@@ -1,18 +1,20 @@
+name: way-of-life
+
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: mylife
-      POSTGRES_USER: mylife_admin
-      POSTGRES_PASSWORD: mylife_admin_local_password
+      POSTGRES_DB: way_of_life
+      POSTGRES_USER: way_of_life_admin
+      POSTGRES_PASSWORD: way_of_life_admin_local_password
     ports:
       - "127.0.0.1:5435:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U mylife_admin -d mylife"]
+      test: ["CMD-SHELL", "pg_isready -U way_of_life_admin -d way_of_life"]
       interval: 5s
       timeout: 5s
       retries: 5

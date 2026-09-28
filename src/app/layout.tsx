@@ -30,7 +30,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MyLife",
+  title: "Way of Life",
   description: "Образ жизни 40 → 80",
   robots: { index: false, follow: false },
 };

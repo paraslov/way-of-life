@@ -1,9 +1,9 @@
-# MyLife
+# Way of Life
 
 Личная «операционная система образа жизни 40 → 80»: утренний чек-ин → светофор →
 решение на день, неделя против targets, тренды относительно себя.
 
-План и статус: [docs/mylife-plan.md](docs/mylife-plan.md). Архитектура:
+План и статус: [docs/way-of-life-plan.md](docs/way-of-life-plan.md). Архитектура:
 [docs/architecture.md](docs/architecture.md).
 
 ## Стек
@@ -17,18 +17,20 @@ Node 24.15.0 (`.tool-versions` для asdf, `.node-version` для CI) и pnpm �
 
 1. `pnpm install`
 2. `cp .env.example .env.local`
-3. `pnpm db:up` — PostgreSQL 16 на `127.0.0.1:5435`
+3. `pnpm db:up` — PostgreSQL 17 на `127.0.0.1:5435`
 4. `pnpm db:migrate`
 5. `pnpm db:create-user you@example.com` — регистрации в приложении нет
 6. `pnpm dev`
 
 `pnpm db:down` останавливает контейнер и сохраняет том с данными.
 
+Бэкапы на свою машину: `pnpm db:backup` — см. [docs/backups.md](docs/backups.md).
+
 ### Роли БД
 
-- `mylife_admin` владеет схемой; используется только CLI-миграциями и созданием
+- `way_of_life_admin` владеет схемой; используется только CLI-миграциями и созданием
   пользователя через `DATABASE_ADMIN_URL`.
-- `mylife_app` — runtime-роль `NOSUPERUSER`/`NOBYPASSRLS` для Next.js (`DATABASE_URL`).
+- `way_of_life_app` — runtime-роль `NOSUPERUSER`/`NOBYPASSRLS` для Next.js (`DATABASE_URL`).
   Приложение при первом подключении проверяет роль и падает, если она обходит RLS.
 
 ### Роли в production
@@ -36,11 +38,11 @@ Node 24.15.0 (`.tool-versions` для asdf, `.node-version` для CI) и pnpm �
 Перед первой миграцией создать runtime-роль в production-базе:
 
 ```sql
-CREATE ROLE mylife_app
+CREATE ROLE way_of_life_app
   LOGIN PASSWORD '<generated-runtime-password>'
   NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOREPLICATION NOBYPASSRLS;
-GRANT CONNECT ON DATABASE <database_name> TO mylife_app;
-GRANT USAGE ON SCHEMA public TO mylife_app;
+GRANT CONNECT ON DATABASE <database_name> TO way_of_life_app;
+GRANT USAGE ON SCHEMA public TO way_of_life_app;
 ```
 
 Миграции выдают ей точные права. В Vercel задаётся только pooled URL этой роли

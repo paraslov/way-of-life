@@ -26,7 +26,7 @@ Require branches to be up to date before merging, and restrict bypasses.
 1. Provision a PostgreSQL database (for example Neon) near the Vercel function
    region you will choose in Project Settings. Create a separate database or
    branch for Preview; previews must never use production credentials or data.
-2. As the database owner, create `mylife_app` using the SQL in the README's
+2. As the database owner, create `way_of_life_app` using the SQL in the README's
    Production database roles section. This must happen **before** migration,
    because migrations grant permissions only when that role exists.
 3. In a trusted operator shell, set `DATABASE_ADMIN_URL` to the provider's
@@ -34,7 +34,7 @@ Require branches to be up to date before merging, and restrict bypasses.
    `pnpm db:migrate`. Repeat for the preview database.
 4. With that same environment, run `pnpm db:create-user you@example.com` and
    enter a password at the prompt. Repeat for a preview test account.
-5. Obtain pooled connection URLs using `mylife_app` credentials for app runtime.
+5. Obtain pooled connection URLs using `way_of_life_app` credentials for app runtime.
    Preserve provider-required TLS parameters. The app rejects superuser and
    BYPASSRLS connections; the provider's default owner URL is unsuitable.
 
@@ -51,7 +51,7 @@ still require their own migrations using their own owner URL.
 
    | Variable | Value |
    | --- | --- |
-   | `DATABASE_URL` | Environment-specific pooled `mylife_app` URL with TLS |
+   | `DATABASE_URL` | Environment-specific pooled `way_of_life_app` URL with TLS |
    | `AUTH_THROTTLE_SECRET` | Unique random secret, at least 32 characters; generate with `openssl rand -base64 32` |
    | `ENABLE_EXPERIMENTAL_COREPACK` | `1`, to enable the pinned package manager |
 
@@ -82,9 +82,9 @@ receive Vercel previews using their separately configured databases.
    | Secret | Where to get the value |
    | --- | --- |
    | `DATABASE_ADMIN_URL` | Neon → Connect → `neondb_owner`, pooling OFF; copy the complete production URL with the password |
-   | `VERCEL_TOKEN` | [Vercel account tokens](https://vercel.com/account/tokens); create a token scoped to the team owning MyLife |
+   | `VERCEL_TOKEN` | [Vercel account tokens](https://vercel.com/account/tokens); create a token scoped to the team owning Way of Life |
    | `VERCEL_ORG_ID` | Vercel team settings → General → Team ID (the CLI calls it Org ID) |
-   | `VERCEL_PROJECT_ID` | MyLife's Vercel project settings → General → Project ID |
+   | `VERCEL_PROJECT_ID` | Way of Life's Vercel project settings → General → Project ID |
 
    Alternatively, `vercel link` in a trusted local terminal creates ignored
    `.vercel/project.json`, whose `orgId` and `projectId` contain the two IDs.
@@ -108,7 +108,7 @@ when a release includes schema changes.
 
 1. Add a new SQL file, for example `migrations/0004_add_reminders.sql`. Preserve
    zero-padded ordering and never edit or rename an already applied migration.
-2. Include appropriate grants for `mylife_app`; user-owned tables also need forced
+2. Include appropriate grants for `way_of_life_app`; user-owned tables also need forced
    RLS and policies following the existing migrations.
 3. Test locally with `pnpm db:migrate` and exercise the changed app behavior.
    Apply separately to your preview database before testing a schema-dependent

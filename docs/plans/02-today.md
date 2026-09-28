@@ -1,7 +1,7 @@
 # 02 — Сегодня: чек-ин → светофор → решение + простая неделя
 
 **Версия:** V0.2 · **Статус:** ⬜ · **Зависит от:** 00 (00.1–00.4), 01 · **Обновлён:** 28.09.2026
-Мастер-план: [mylife-plan.md](../mylife-plan.md) · Архитектура: [architecture.md](../architecture.md)
+Мастер-план: [way-of-life-plan.md](../way-of-life-plan.md) · Архитектура: [architecture.md](../architecture.md)
 
 ## Чек-лист
 
@@ -112,7 +112,7 @@ targets          id, user_id, metric_key, period(day|week), minimum, target_min,
 **Когда отправлять:** после гейта, если «Сегодня» на ACT-компонентах неудобен на телефоне
 или вердикт читается плохо. До гейта не отправлять (D4).
 
-> **Design request: MyLife — «Сегодня» (утренний чек-ин и светофор)**
+> **Design request: Way of Life — «Сегодня» (утренний чек-ин и светофор)**
 >
 > Request **to** design. Источник поведения и данных — этот план (§ «Шаги») и
 > [architecture.md](../architecture.md) §6 и §9.

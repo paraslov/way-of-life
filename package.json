@@ -1,5 +1,5 @@
 {
-  "name": "mylife",
+  "name": "way-of-life",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@10.34.5",
@@ -19,6 +19,7 @@
     "db:logs": "docker compose logs -f postgres",
     "db:migrate": "node scripts/migrate.mjs",
     "db:create-user": "node scripts/create-user.mjs",
+    "db:backup": "node scripts/backup.mjs",
     "typecheck": "next typegen && tsc --noEmit",
     "test:db": "node --test tests/db/*.test.mjs && vitest run --config vitest.db.config.ts --passWithNoTests",
     "check": "pnpm lint && pnpm typecheck && pnpm test",

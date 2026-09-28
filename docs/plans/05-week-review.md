@@ -1,7 +1,7 @@
 # 05 — Неделя, режимы, разгрузка, Weekly Review
 
 **Версия:** V0.5 · **Статус:** ⬜ (черновик до гейта) · **Зависит от:** 02, 03 · **Обновлён:** 28.09.2026
-Мастер-план: [mylife-plan.md](../mylife-plan.md) · Архитектура: [architecture.md](../architecture.md)
+Мастер-план: [way-of-life-plan.md](../way-of-life-plan.md) · Архитектура: [architecture.md](../architecture.md)
 
 > План написан до гейта. Перед стартом пересмотреть по [итогам использования 02](./02-today.md#итоги-использования).
 
@@ -58,7 +58,7 @@ weekly_reviews  user_id, week_start (uniq), helped text, hurt text, change_next 
 
 **Когда отправлять:** в начале этапа.
 
-> **Design request: MyLife — Неделя и Weekly Review**
+> **Design request: Way of Life — Неделя и Weekly Review**
 >
 > **Что нужно и зачем.** (1) Dashboard недели: план по шаблону против факта, targets
 > «минимум / норма», сигнал разгрузки, режим недели. (2) Weekly Review — 2–3 минуты в
