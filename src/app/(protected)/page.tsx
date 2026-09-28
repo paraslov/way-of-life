@@ -3,6 +3,7 @@ import { PageHeader } from "@/components/page-header";
 import { ActivityLog } from "@/components/today/activity-log";
 import { CheckinForm } from "@/components/today/checkin-form";
 import { DecisionCard } from "@/components/today/decision-card";
+import { RedFlagAlert } from "@/components/today/red-flag-alert";
 import { Verdict } from "@/components/today/verdict";
 import { formatDayTitle, formatShortDate } from "@/lib/date";
 import { getTodayView } from "@/lib/db/today";
@@ -25,6 +26,12 @@ export default async function TodayPage() {
         title={t("nav.today")}
         description={t("pages.today")}
       />
+
+      {view.checkin?.red_flags.length ? (
+        <div className="mt-6">
+          <RedFlagAlert flags={view.checkin.red_flags} />
+        </div>
+      ) : null}
 
       {decision ? (
         <div className="mt-6 space-y-4">
