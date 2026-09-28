@@ -9,7 +9,7 @@
 - [x] **02.2** — Миграция: `daily_checkins`, `symptom_definitions`, `symptom_entries`, `day_decisions`, `activities`, `targets` + RLS + GRANT
 - [x] **02.3** — Seed из [defaults.md](../content/defaults.md): настройки, симптомы (колено, бедро, перебои, признаки болезни закреплены), targets, стартовый baseline RHR 48, шаблон недели
 - [x] **02.4** — Baseline engine `src/lib/baseline/` + юнит-тесты
-- [ ] **02.5** — Сигналы и итог светофора `src/lib/light/` (с `UNKNOWN`, `RULES_VERSION`) + юнит-тесты
+- [x] **02.5** — Сигналы и итог светофора `src/lib/light/` (с `UNKNOWN`, `RULES_VERSION`) + юнит-тесты
 - [ ] **02.6** — Решение дня `src/lib/decision/`: план по шаблону → подмена по светофору → `recommended_action` + тесты
 - [ ] **02.7** — Репозитории и server actions: сохранить чек-ин, симптомы, выбор решения, активность
 - [ ] **02.8** — Экран «Сегодня»: форма чек-ина ≤ 60 с (предзаполнение, степперы)
