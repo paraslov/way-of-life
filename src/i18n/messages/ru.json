@@ -37,7 +37,51 @@
     "reference": "План «Образ жизни 40 → 80» внутри приложения, со ссылками «почему» из экранов."
   },
   "today": {
-    "dateLine": "{date} · {timeZone}"
+    "dateLine": "{date} · {timeZone}",
+    "checkinTitle": "Утренний чек-ин",
+    "checkinHint": "Заполнено вчерашними значениями — поправьте то, что изменилось. «—» значит «не ввёл».",
+    "editCheckin": "Изменить чек-ин",
+    "hideCheckin": "Свернуть",
+    "saveCheckin": "Сохранить и получить вердикт",
+    "invalid": "Проверьте значения: сон в формате 7:05, числа в допустимых пределах.",
+    "sleep": "Сон, ч:мм",
+    "sleepPlaceholder": "7:05",
+    "rhr": "Пульс покоя",
+    "hrvStatus": "Статус HRV",
+    "energy": "Энергия",
+    "desire": "Желание двигаться",
+    "legs": "Ноги",
+    "more": "Ещё: Sleep Score, HRV в мс",
+    "sleepScore": "Sleep Score",
+    "hrvMs": "HRV ночью, мс",
+    "symptoms": "Симптомы",
+    "addSymptom": "+ симптом",
+    "addSymptomPlaceholder": "Выберите симптом",
+    "atRest": "в покое",
+    "heartRate": "ЧСС",
+    "yes": "Да",
+    "no": "Нет",
+    "notEntered": "—",
+    "notEnteredLabel": "Не ввёл",
+    "fromYesterday": "как вчера",
+    "decrease": "Меньше",
+    "increase": "Больше",
+    "redFlagsTitle": "Красные флаги",
+    "redFlagsHint": "Отмечайте, только если было. Они перекрывают светофор.",
+    "note": "Заметка",
+    "desireLevels": {
+      "1": "Не хочется",
+      "2": "Нейтрально",
+      "3": "Хочется"
+    },
+    "legsLevels": {
+      "1": "Забитые",
+      "2": "Тяжёлые",
+      "3": "Лёгкие"
+    },
+    "unitBpm": "уд/мин",
+    "unitMs": "мс",
+    "unitOfTen": "из 10"
   },
   "metrics": {
     "sleep": {
@@ -166,5 +210,153 @@
     "rest": "Отдых",
     "rest_or_walk": "Отдых или прогулка",
     "stop_see_doctor": "Без нагрузки. Обратиться к врачу"
+  },
+  "hrvStatus": {
+    "balanced": "Balanced",
+    "unbalanced": "Unbalanced",
+    "low": "Low",
+    "poor": "Poor"
+  },
+  "redFlags": {
+    "palpitations_exercise": "Перебои на нагрузке не проходят на шаге",
+    "chest_pain": "Боль или давление в груди",
+    "presyncope": "Предобморок",
+    "dyspnea": "Одышка несоразмерно нагрузке",
+    "alertTitle": "Красный флаг: остановиться",
+    "alertBody": "Сегодня без нагрузки. Обратитесь к врачу. Это важнее светофора и плана."
+  },
+  "light": {
+    "verdict": {
+      "green": "Зелёный",
+      "yellow": "Жёлтый",
+      "red": "Красный",
+      "unknown": "Нет данных"
+    },
+    "verdictHint": {
+      "green": "Можно по плану.",
+      "yellow": "Нагрузку снизить.",
+      "red": "День восстановления.",
+      "unknown": "Данных мало — действует план по умолчанию."
+    },
+    "state": {
+      "green": "зелёный",
+      "yellow": "жёлтый",
+      "red": "красный",
+      "unknown": "нет данных"
+    },
+    "signals": {
+      "sleep": "Сон",
+      "rhr": "Пульс покоя",
+      "hrv": "HRV",
+      "desire": "Желание двигаться",
+      "legs": "Ноги",
+      "knee": "Колено",
+      "thigh": "Бедро",
+      "palpitations": "Перебои",
+      "illness": "Признаки болезни"
+    },
+    "reasons": {
+      "unknown": "не введено",
+      "sleep": {
+        "green": "{hours}: 7 ч и больше",
+        "yellow": "{hours}: от 6 до 7 ч",
+        "red": "{hours}: меньше 6 ч"
+      },
+      "rhr": {
+        "green": "{value} при baseline {baseline}: не выше +3",
+        "yellow": "{value} при baseline {baseline}: +{delta}",
+        "red": "{value} при baseline {baseline}: +{delta}, {highDays, plural, one {# день} few {# дня} many {# дней} other {# дня}} подряд"
+      },
+      "rhrStart": " · по стартовым порогам",
+      "hrv": {
+        "green": "{status}",
+        "yellow": "{status}",
+        "red": "{status}"
+      },
+      "hrvLowDays": ", {lowDays, plural, one {# день} few {# дня} many {# дней} other {# дня}} подряд",
+      "desire": {
+        "green": "хочется выйти",
+        "yellow": "нейтрально, вяло",
+        "red": "даже вставать не хочется"
+      },
+      "legs": {
+        "green": "лёгкие",
+        "yellow": "тяжёлые",
+        "red": "тяжёлые {heavyDays, plural, one {# день} few {# дня} many {# дней} other {# дня}} подряд"
+      },
+      "joint": {
+        "green": "{severity} из 10",
+        "yellow": "{severity} из 10",
+        "red": "{severity} из 10"
+      },
+      "jointAtRest": ", в покое",
+      "palpitations": {
+        "green": "не было",
+        "yellow": "были: сегодня без интенсивной"
+      },
+      "illness": {
+        "green": "нет",
+        "red": "есть"
+      }
+    },
+    "ignoredYellow": "Учтено, но вердикт не меняет: {signal}.",
+    "noIntensity": "Были перебои: сегодня без интенсивной, даже при зелёном.",
+    "energy": "Энергия {value} из 5",
+    "energyBaseline": "обычно {baseline}",
+    "energyNote": "в вердикт не входит",
+    "rulesVersion": "Правила v{version}"
+  },
+  "decision": {
+    "title": "Решение на сегодня",
+    "planned": "По плану",
+    "recommended": "Рекомендация",
+    "reasons": {
+      "as_planned": "Светофор не мешает плану.",
+      "yellow": "Жёлтый: нагрузка снижена.",
+      "red": "Красный: день восстановления.",
+      "unknown": "Данных мало: план по умолчанию, если самочувствие нормальное.",
+      "no_intensity": "Были перебои: интенсивную заменяет лёгкий бег.",
+      "red_flag": "Красный флаг: нагрузку остановить."
+    },
+    "intensityTooSoon": "Интенсивная была {date}, прошло меньше 7 дней: вместо неё лёгкий бег.",
+    "chooseHint": "Рекомендация — предложение. Выберите, что делаете:",
+    "choices": {
+      "accept": "Принять",
+      "keep_original": "Оставить план",
+      "skip": "Пропустить",
+      "custom": "Своё"
+    },
+    "customPlaceholder": "Что делаете вместо",
+    "customSave": "Сохранить",
+    "chosen": "Выбрано: {choice}",
+    "invalid": "Для «Своё» напишите, что делаете."
+  },
+  "activity": {
+    "title": "Сделано сегодня",
+    "empty": "Пока ничего не отмечено.",
+    "type": "Что",
+    "minutes": "Минуты",
+    "rpe": "RPE",
+    "rpeHint": "Усилие 1–10, можно пропустить",
+    "add": "Отметить",
+    "remove": "Удалить",
+    "steps": "Шаги за день",
+    "stepsSave": "Сохранить шаги",
+    "invalid": "Выберите, что сделали; минуты 1–1440, RPE 1–10.",
+    "summary": "{minutes} мин",
+    "summaryRpe": "RPE {rpe}"
+  },
+  "activityTypes": {
+    "easy_run": "Лёгкий бег",
+    "intensity": "Интенсивная",
+    "strength": "Силовая",
+    "strength_lite": "Силовая Lite",
+    "power_balance": "Мощность и баланс",
+    "mobility": "Подвижность",
+    "trek": "Трекинг",
+    "walk": "Прогулка",
+    "walk_after_meal": "Прогулка после еды",
+    "rest": "Отдых",
+    "other": "Другое"
   }
 }
