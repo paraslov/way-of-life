@@ -39,6 +39,55 @@
   "today": {
     "dateLine": "{date} · {timeZone}"
   },
+  "metrics": {
+    "sleep": {
+      "duration": "Сон",
+      "score": "Sleep Score"
+    },
+    "rhr": {
+      "daily": "Пульс покоя"
+    },
+    "hrv": {
+      "nightly": "HRV",
+      "status": "Статус HRV"
+    },
+    "energy": {
+      "morning": "Энергия"
+    },
+    "desire": {
+      "morning": "Желание двигаться"
+    },
+    "legs": {
+      "morning": "Ноги"
+    },
+    "aerobic": {
+      "minutes": "Аэробные минуты"
+    },
+    "intensity": {
+      "sessions": "Интенсивные"
+    },
+    "strength": {
+      "sessions": "Силовые"
+    },
+    "power_balance": {
+      "sessions": "Мощность и баланс"
+    },
+    "mobility": {
+      "sessions": "Подвижность"
+    },
+    "rest": {
+      "days": "Дни отдыха"
+    },
+    "steps": {
+      "daily": "Шаги"
+    },
+    "protein": {
+      "daily": "Белок"
+    },
+    "fiber": {
+      "daily": "Клетчатка"
+    }
+  },
   "login": {
     "intro": "Образ жизни 40 → 80",
     "title": "Вход",

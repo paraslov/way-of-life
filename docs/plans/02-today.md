@@ -1,11 +1,11 @@
 # 02 — Сегодня: чек-ин → светофор → решение + простая неделя
 
-**Версия:** V0.2 · **Статус:** ⬜ · **Зависит от:** 00 (00.1–00.4), 01 · **Обновлён:** 28.09.2026
+**Версия:** V0.2 · **Статус:** 🟡 · **Зависит от:** 00 (00.1–00.4), 01 · **Обновлён:** 28.09.2026
 Мастер-план: [way-of-life-plan.md](../way-of-life-plan.md) · Архитектура: [architecture.md](../architecture.md)
 
 ## Чек-лист
 
-- [ ] **02.1** — Реестр показателей v0: сон, RHR, HRV, энергия, желание, ноги (`src/lib/metrics/registry.ts`)
+- [x] **02.1** — Реестр показателей v0: сон, RHR, HRV, энергия, желание, ноги + ключи targets (`src/lib/metrics/registry.ts`)
 - [ ] **02.2** — Миграция: `daily_checkins`, `symptom_definitions`, `symptom_entries`, `day_decisions`, `activities`, `targets` + RLS + GRANT
 - [ ] **02.3** — Seed из [defaults.md](../content/defaults.md): настройки, симптомы (колено, бедро, перебои, признаки болезни закреплены), targets, стартовый baseline RHR 48, шаблон недели
 - [ ] **02.4** — Baseline engine `src/lib/baseline/` + юнит-тесты
@@ -157,3 +157,4 @@ targets          id, user_id, metric_key, period(day|week), minimum, target_min,
 | Дата | Что | Почему |
 |---|---|---|
 | 28.09.2026 | План создан | Разбивка мастер-плана; вертикальный срез по ревью |
+| 28.09.2026 | 02.1: ключи вида `<семейство>.<мера>` (`rhr.daily`, `hrv.nightly`, `energy.morning`…); в реестр вошли и ключи targets; названия — в каталоге `metrics.*`, а не в реестре | Неделе (02.12) нужны единицы targets; весь текст интерфейса живёт в ru.json |
