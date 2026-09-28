@@ -5,7 +5,7 @@ import { z } from "zod";
 import { requireCurrentUser } from "@/auth/session";
 import { deleteUserData } from "@/lib/db/user-data";
 import { updateSettings } from "@/lib/db/user-settings";
-import { DELETE_CONFIRMATION, settingsSchema } from "@/lib/settings";
+import { DELETE_CONFIRMATION, physiologySchema } from "@/lib/settings";
 
 export type SettingsState = { status?: "saved" | "invalid" };
 
@@ -18,7 +18,7 @@ export async function saveSettingsAction(
   formData: FormData,
 ): Promise<SettingsState> {
   await requireCurrentUser();
-  const parsed = settingsSchema.safeParse({
+  const parsed = physiologySchema.safeParse({
     timezone: formData.get("timezone"),
     lthr: numberField(formData.get("lthr")),
     hrMax: numberField(formData.get("hrMax")),

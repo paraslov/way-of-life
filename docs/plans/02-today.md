@@ -7,7 +7,7 @@
 
 - [x] **02.1** — Реестр показателей v0: сон, RHR, HRV, энергия, желание, ноги + ключи targets (`src/lib/metrics/registry.ts`)
 - [x] **02.2** — Миграция: `daily_checkins`, `symptom_definitions`, `symptom_entries`, `day_decisions`, `activities`, `targets` + RLS + GRANT
-- [ ] **02.3** — Seed из [defaults.md](../content/defaults.md): настройки, симптомы (колено, бедро, перебои, признаки болезни закреплены), targets, стартовый baseline RHR 48, шаблон недели
+- [x] **02.3** — Seed из [defaults.md](../content/defaults.md): настройки, симптомы (колено, бедро, перебои, признаки болезни закреплены), targets, стартовый baseline RHR 48, шаблон недели
 - [ ] **02.4** — Baseline engine `src/lib/baseline/` + юнит-тесты
 - [ ] **02.5** — Сигналы и итог светофора `src/lib/light/` (с `UNKNOWN`, `RULES_VERSION`) + юнит-тесты
 - [ ] **02.6** — Решение дня `src/lib/decision/`: план по шаблону → подмена по светофору → `recommended_action` + тесты
@@ -161,3 +161,4 @@ targets          id, user_id, metric_key, period(day|week), minimum, target_min,
 | 28.09.2026 | План создан | Разбивка мастер-плана; вертикальный срез по ревью |
 | 28.09.2026 | 02.1: ключи вида `<семейство>.<мера>` (`rhr.daily`, `hrv.nightly`, `energy.morning`…); в реестр вошли и ключи targets; названия — в каталоге `metrics.*`, а не в реестре | Неделе (02.12) нужны единицы targets; весь текст интерфейса живёт в ru.json |
 | 28.09.2026 | 02.2: в `daily_checkins` добавлены `steps` (отметка «сделал» днём) и `red_flags text[]` (красные флаги — наблюдение дня, а не симптом); у `symptom_entries` — `context` rest/exercise и `heart_rate` (перебои + ЧСС, «боль в покое»); `chosen_action` nullable до выбора; у `targets` период только day/week, интенсивная — «1 за неделю» | Всё это нужно правилам v1 и экрану «Сегодня»; окно 10 дней пересмотрим на гейте |
+| 28.09.2026 | 02.3: seed — не отдельный скрипт, а `ensureUserDefaults` (идемпотентно, при загрузке «Сегодня»): симптомы по ключу, targets только если их нет, `active_from` = 01.01.2026. Стартовый RHR 48 и шаблон недели — defaults в `user_settings` (`rhrStartBaseline`, `weekTemplate`) | Один пользователь создаётся через CLI; после «Удалить все данные» стартовые данные возвращаются сами |

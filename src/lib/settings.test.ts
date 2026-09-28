@@ -40,3 +40,17 @@ describe("resolveSettings", () => {
     );
   });
 });
+
+describe("stage 02 defaults", () => {
+  it("starts RHR at 48 and uses the rules-v1 week", () => {
+    expect(DEFAULT_SETTINGS.rhrStartBaseline).toBe(48);
+    expect(DEFAULT_SETTINGS.weekTemplate[2]).toBe("intensity");
+    expect(DEFAULT_SETTINGS.weekTemplate[6]).toBe("rest");
+  });
+
+  it("drops a week template of the wrong length", () => {
+    expect(
+      resolveSettings({ weekTemplate: ["rest", "rest"] }).weekTemplate,
+    ).toEqual(DEFAULT_SETTINGS.weekTemplate);
+  });
+});
