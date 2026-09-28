@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-chip: 6px;
+  --radius-button: 8px;
+  --radius-input: 10px;
+  --radius-card: 14px;
+  --radius-modal: 16px;
+  --color-page: var(--page);
+  --color-field: var(--field);
+  --color-panel: var(--panel);
+  --color-signal-green: var(--signal-green);
+  --color-signal-green-tint: var(--signal-green-tint);
+  --color-signal-green-border: var(--signal-green-border);
+  --color-signal-yellow: var(--signal-yellow);
+  --color-signal-yellow-tint: var(--signal-yellow-tint);
+  --color-signal-yellow-border: var(--signal-yellow-border);
+  --color-signal-red: var(--signal-red);
+  --color-signal-red-tint: var(--signal-red-tint);
+  --color-signal-red-border: var(--signal-red-border);
+  --color-signal-unknown: var(--signal-unknown);
+  --color-signal-unknown-tint: var(--signal-unknown-tint);
+  --color-signal-unknown-border: var(--signal-unknown-border);
+  --color-pine: var(--pine);
+  --color-pine-tint: var(--pine-tint);
+  --color-clay: var(--clay);
+  --color-clay-tint: var(--clay-tint);
+  --color-slate: var(--slate);
+  --color-slate-tint: var(--slate-tint);
+  --color-gold: var(--gold);
+  --color-gold-tint: var(--gold-tint);
+  --font-sans:
+    var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: var(--font-serif), ui-serif, Georgia, Cambria, serif;
+  --font-mono:
+    var(--font-mono), ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+
+  /* Page surface: warm off-white, distinct from --background/--card. */
+  --page: oklch(0.97 0.004 85);
+  --field: oklch(0.985 0.002 85);
+  --panel: oklch(0.988 0 0);
+
+  /* Traffic light (architecture §6). Colour is never the only channel: every
+     signal also carries a label and an icon. Unknown is neutral, not "bad". */
+  --signal-green: oklch(0.5 0.11 155);
+  --signal-green-tint: oklch(0.97 0.025 155);
+  --signal-green-border: oklch(0.86 0.06 155);
+  --signal-yellow: oklch(0.56 0.12 80);
+  --signal-yellow-tint: oklch(0.975 0.03 90);
+  --signal-yellow-border: oklch(0.87 0.08 90);
+  --signal-red: oklch(0.55 0.17 27);
+  --signal-red-tint: oklch(0.975 0.015 27);
+  --signal-red-border: oklch(0.87 0.06 27);
+  --signal-unknown: oklch(0.55 0.02 250);
+  --signal-unknown-tint: oklch(0.97 0.005 250);
+  --signal-unknown-border: oklch(0.88 0.01 250);
+
+  /* Plan accents, from the «Образ жизни 40 → 80» page: strength, run,
+     intensity, trek. Categorical only — they never mean good or bad. */
+  --pine: oklch(0.48 0.08 158);
+  --pine-tint: oklch(0.95 0.02 158);
+  --clay: oklch(0.55 0.13 45);
+  --clay-tint: oklch(0.94 0.03 45);
+  --slate: oklch(0.5 0.07 240);
+  --slate-tint: oklch(0.94 0.02 240);
+  --gold: oklch(0.56 0.11 85);
+  --gold-tint: oklch(0.94 0.035 85);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+
+  --page: oklch(0.16 0.003 85);
+  --field: oklch(0.23 0 0);
+  --panel: oklch(0.185 0 0);
+
+  --signal-green: oklch(0.74 0.13 155);
+  --signal-green-tint: oklch(0.25 0.035 155);
+  --signal-green-border: oklch(0.4 0.06 155);
+  --signal-yellow: oklch(0.8 0.12 85);
+  --signal-yellow-tint: oklch(0.27 0.04 85);
+  --signal-yellow-border: oklch(0.45 0.07 85);
+  --signal-red: oklch(0.7 0.16 27);
+  --signal-red-tint: oklch(0.26 0.045 27);
+  --signal-red-border: oklch(0.45 0.08 27);
+  --signal-unknown: oklch(0.7 0.02 250);
+  --signal-unknown-tint: oklch(0.24 0.008 250);
+  --signal-unknown-border: oklch(0.38 0.015 250);
+
+  --pine: oklch(0.72 0.1 158);
+  --pine-tint: oklch(0.25 0.03 158);
+  --clay: oklch(0.74 0.12 50);
+  --clay-tint: oklch(0.27 0.035 50);
+  --slate: oklch(0.72 0.08 240);
+  --slate-tint: oklch(0.25 0.03 240);
+  --gold: oklch(0.78 0.11 85);
+  --gold-tint: oklch(0.27 0.035 85);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply bg-background;
+  }
+
+  body {
+    @apply min-h-screen bg-background text-foreground antialiased font-sans;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}

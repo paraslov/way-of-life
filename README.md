@@ -31,6 +31,22 @@ Node 24.15.0 (`.tool-versions` для asdf, `.node-version` для CI) и pnpm �
 - `mylife_app` — runtime-роль `NOSUPERUSER`/`NOBYPASSRLS` для Next.js (`DATABASE_URL`).
   Приложение при первом подключении проверяет роль и падает, если она обходит RLS.
 
+### Роли в production
+
+Перед первой миграцией создать runtime-роль в production-базе:
+
+```sql
+CREATE ROLE mylife_app
+  LOGIN PASSWORD '<generated-runtime-password>'
+  NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOREPLICATION NOBYPASSRLS;
+GRANT CONNECT ON DATABASE <database_name> TO mylife_app;
+GRANT USAGE ON SCHEMA public TO mylife_app;
+```
+
+Миграции выдают ей точные права. В Vercel задаётся только pooled URL этой роли
+(`DATABASE_URL`) и `AUTH_THROTTLE_SECRET`; `DATABASE_ADMIN_URL` в runtime не попадает.
+Подробности — [docs/deployment.md](docs/deployment.md).
+
 ## Проверки
 
 - `pnpm check` — biome, типы, юнит-тесты

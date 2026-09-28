@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  # Do not interrupt a production migration/deployment when a new commit arrives.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  quality:
+    name: Lint, types, tests and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm build
+
+  database:
+    name: Migrations and database isolation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: mylife
+          POSTGRES_USER: mylife_admin
+          POSTGRES_PASSWORD: mylife_admin_local_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U mylife_admin -d mylife"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_ADMIN_URL: postgresql://mylife_admin:mylife_admin_local_password@localhost:5432/mylife
+      DATABASE_URL: postgresql://mylife_app:mylife_app_local_password@localhost:5432/mylife
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Create restricted runtime role
+        run: psql "$DATABASE_ADMIN_URL" -v ON_ERROR_STOP=1 -f docker/postgres/init/001-app-role.sql
+      - run: pnpm db:migrate
+      - name: Verify migrations can be rerun
+        run: pnpm db:migrate
+      - run: pnpm test:db
+
+  production:
+    name: Migrate and deploy production
+    needs: [quality, database]
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: production
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+      - name: Check release configuration
+        env:
+          DATABASE_ADMIN_URL: ${{ secrets.DATABASE_ADMIN_URL }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          for key in DATABASE_ADMIN_URL VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+            if [ -z "${!key}" ]; then
+              echo "::error::Missing production secret: $key. See docs/deployment.md."
+              exit 1
+            fi
+          done
+      - uses: pnpm/action-setup@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install pinned Vercel CLI
+        run: npm install --global vercel@59.11.7
+      - name: Reject an obsolete release
+        run: |
+          latest_sha="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [ "$latest_sha" != "$GITHUB_SHA" ]; then
+            echo "::error::main has changed. Run CI on the latest main commit instead."
+            exit 1
+          fi
+      - name: Apply production migrations
+        env:
+          DATABASE_ADMIN_URL: ${{ secrets.DATABASE_ADMIN_URL }}
+        run: pnpm db:migrate
+      - name: Deploy the tested commit to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: >-
+          vercel deploy --prod --yes --token="$VERCEL_TOKEN"
+          --meta githubCommitSha="$GITHUB_SHA"
+          --meta githubCommitRef=main
