@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/page-header";
+import { ActivityLog } from "@/components/today/activity-log";
 import { CheckinForm } from "@/components/today/checkin-form";
 import { DecisionCard } from "@/components/today/decision-card";
 import { Verdict } from "@/components/today/verdict";
@@ -62,6 +63,13 @@ export default async function TodayPage() {
           rhrStart={view.settings.rhrStartBaseline}
         />
       </section>
+
+      <div className="mt-8">
+        <ActivityLog
+          activities={view.activities}
+          steps={view.checkin?.steps ?? null}
+        />
+      </div>
     </div>
   );
 }
