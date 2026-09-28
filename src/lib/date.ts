@@ -75,3 +75,12 @@ export function formatDayTitle(id: string): string {
     month: "long",
   }).format(idToDate(id));
 }
+
+/** «24 сентября» — short date for inline references. */
+export function formatShortDate(id: string): string {
+  return new Intl.DateTimeFormat("ru", {
+    timeZone: "UTC",
+    day: "numeric",
+    month: "long",
+  }).format(idToDate(id));
+}

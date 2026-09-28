@@ -1,7 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/page-header";
 import { CheckinForm } from "@/components/today/checkin-form";
-import { formatDayTitle } from "@/lib/date";
+import { DecisionCard } from "@/components/today/decision-card";
+import { Verdict } from "@/components/today/verdict";
+import { formatDayTitle, formatShortDate } from "@/lib/date";
 import { getTodayView } from "@/lib/db/today";
 import { buildDraft } from "@/lib/today/draft";
 
@@ -9,6 +11,8 @@ export default async function TodayPage() {
   const t = await getTranslations();
   const view = await getTodayView();
   const draft = buildDraft(view);
+  const { decision } = view;
+  const lastIntensity = decision?.snapshot.plan.lastIntensityDate;
 
   return (
     <div className="max-w-[720px]">
@@ -20,6 +24,28 @@ export default async function TodayPage() {
         title={t("nav.today")}
         description={t("pages.today")}
       />
+
+      {decision ? (
+        <div className="mt-6 space-y-4">
+          <Verdict snapshot={decision.snapshot} />
+          <DecisionCard
+            planned={t(`sessions.${decision.plannedSession}`)}
+            recommended={t(`actions.${decision.recommendedAction}`, {
+              hrCap: decision.snapshot.hrCap,
+            })}
+            reason={t(`decision.reasons.${decision.snapshot.reason}`)}
+            note={
+              decision.snapshot.plan.intensityTooSoon && lastIntensity
+                ? t("decision.intensityTooSoon", {
+                    date: formatShortDate(lastIntensity),
+                  })
+                : null
+            }
+            chosen={decision.chosenAction}
+            customText={decision.customText}
+          />
+        </div>
+      ) : null}
 
       <section aria-labelledby="checkin-title" className="mt-6 space-y-3">
         <h2
