@@ -142,5 +142,29 @@
     "deleteAction": "Удалить всё",
     "deleteUnconfirmed": "Слово подтверждения не совпадает.",
     "deleted": "Все данные удалены."
+  },
+  "sessions": {
+    "strength_a": "Силовая A + мощность",
+    "strength_b": "Силовая B + мощность",
+    "easy_run": "Лёгкий бег + strides",
+    "intensity": "Интенсивная",
+    "active_rest": "Активный отдых",
+    "trek": "Трекинг",
+    "rest": "Отдых"
+  },
+  "actions": {
+    "strength_a": "Силовая A + мощность",
+    "strength_b": "Силовая B + мощность",
+    "strength_lite": "Силовая Lite, пульс < 130",
+    "easy_run": "Лёгкий бег + strides, пульс ≤ {hrCap}",
+    "easy_run_capped": "Лёгкий бег 30–40 мин, пульс ≤ {hrCap}",
+    "easy_run_short": "Лёгкий бег короче обычного, пульс ≤ {hrCap}",
+    "intensity": "Интенсивная по плану",
+    "active_rest": "Активный отдых",
+    "trek": "Трекинг, пульс ≤ {hrCap}",
+    "trek_short": "Трекинг короче обычного, пульс ≤ {hrCap}",
+    "rest": "Отдых",
+    "rest_or_walk": "Отдых или прогулка",
+    "stop_see_doctor": "Без нагрузки. Обратиться к врачу"
   }
 }
