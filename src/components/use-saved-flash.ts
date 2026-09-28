@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /** How long a "Saved" confirmation stays up after a successful save. */
 export const SAVED_FLASH_MS = 1_800;
@@ -21,11 +21,12 @@ export function useSavedFlash() {
     [],
   );
 
-  function flash() {
+  // Stable, so effects that list it as a dependency run once per save.
+  const flash = useCallback(() => {
     if (timer.current) clearTimeout(timer.current);
     setSaved(true);
     timer.current = setTimeout(() => setSaved(false), SAVED_FLASH_MS);
-  }
+  }, []);
 
   return { saved, flash };
 }
