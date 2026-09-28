@@ -8,7 +8,15 @@ import { withCurrentUserDb } from "@/lib/db/user-context";
  * tests/db/isolation.test.mjs, which fails when a table with `user_id` is
  * missing there (architecture §10: export and delete cover all data).
  */
-export const USER_DATA_TABLES = ["user_settings"] as const;
+export const USER_DATA_TABLES = [
+  "user_settings",
+  "daily_checkins",
+  "symptom_definitions",
+  "symptom_entries",
+  "day_decisions",
+  "activities",
+  "targets",
+] as const;
 
 export type UserDataExport = {
   format: "way-of-life-export";

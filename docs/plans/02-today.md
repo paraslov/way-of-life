@@ -6,7 +6,7 @@
 ## Чек-лист
 
 - [x] **02.1** — Реестр показателей v0: сон, RHR, HRV, энергия, желание, ноги + ключи targets (`src/lib/metrics/registry.ts`)
-- [ ] **02.2** — Миграция: `daily_checkins`, `symptom_definitions`, `symptom_entries`, `day_decisions`, `activities`, `targets` + RLS + GRANT
+- [x] **02.2** — Миграция: `daily_checkins`, `symptom_definitions`, `symptom_entries`, `day_decisions`, `activities`, `targets` + RLS + GRANT
 - [ ] **02.3** — Seed из [defaults.md](../content/defaults.md): настройки, симптомы (колено, бедро, перебои, признаки болезни закреплены), targets, стартовый baseline RHR 48, шаблон недели
 - [ ] **02.4** — Baseline engine `src/lib/baseline/` + юнит-тесты
 - [ ] **02.5** — Сигналы и итог светофора `src/lib/light/` (с `UNKNOWN`, `RULES_VERSION`) + юнит-тесты
@@ -43,17 +43,19 @@
 ```text
 daily_checkins   user_id, local_date (uniq с user_id), sleep_minutes, sleep_score, bed_at, wake_at,
                  rhr, hrv_ms, hrv_status(balanced|unbalanced|low|poor|null), energy(1–5), desire(1–3),
-                 legs(1–3), note, source, created_at, updated_at
+                 legs(1–3), steps, red_flags text[], note, source, created_at, updated_at
 symptom_definitions  id, user_id, key, name, scale(0_10|bool), pinned, archived, sort
-symptom_entries  id, user_id, local_date, symptom_id, severity, context, note  (uniq: user, date, symptom)
+symptom_entries  id, user_id, local_date, symptom_id, severity, context(rest|exercise), heart_rate, note
+                 (uniq: user, date, symptom; FK (symptom_id, user_id) — только на свои определения)
 day_decisions    user_id, local_date (uniq), rule_version, planned_session, recommended_action,
-                 chosen_action(accept|keep_original|skip|custom), custom_text, snapshot jsonb, decided_at
+                 chosen_action(accept|keep_original|skip|custom|null), custom_text, snapshot jsonb, decided_at
 activities       id, user_id, local_date, type, duration_min, rpe, avg_hr, distance_km, note,
                  source, external_id (uniq с source, nullable)
 targets          id, user_id, metric_key, period(day|week), minimum, target_min, target_max, unit, active_from
 ```
 
-Все поля наблюдений nullable: пустое значение даёт `UNKNOWN`, а не ошибку.
+Все поля наблюдений nullable: пустое значение даёт `UNKNOWN`, а не ошибку. Миграция —
+[`migrations/0002_today.sql`](../../migrations/0002_today.sql).
 
 ### 02.4 — Baseline
 
@@ -158,3 +160,4 @@ targets          id, user_id, metric_key, period(day|week), minimum, target_min,
 |---|---|---|
 | 28.09.2026 | План создан | Разбивка мастер-плана; вертикальный срез по ревью |
 | 28.09.2026 | 02.1: ключи вида `<семейство>.<мера>` (`rhr.daily`, `hrv.nightly`, `energy.morning`…); в реестр вошли и ключи targets; названия — в каталоге `metrics.*`, а не в реестре | Неделе (02.12) нужны единицы targets; весь текст интерфейса живёт в ru.json |
+| 28.09.2026 | 02.2: в `daily_checkins` добавлены `steps` (отметка «сделал» днём) и `red_flags text[]` (красные флаги — наблюдение дня, а не симптом); у `symptom_entries` — `context` rest/exercise и `heart_rate` (перебои + ЧСС, «боль в покое»); `chosen_action` nullable до выбора; у `targets` период только day/week, интенсивная — «1 за неделю» | Всё это нужно правилам v1 и экрану «Сегодня»; окно 10 дней пересмотрим на гейте |
