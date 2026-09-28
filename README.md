@@ -17,7 +17,7 @@ Node 24.15.0 (`.tool-versions` для asdf, `.node-version` для CI) и pnpm �
 
 1. `pnpm install`
 2. `cp .env.example .env.local`
-3. `pnpm db:up` — PostgreSQL 17 на `127.0.0.1:5435`
+3. `pnpm db:up` — PostgreSQL 18 на `127.0.0.1:5435`
 4. `pnpm db:migrate`
 5. `pnpm db:create-user you@example.com` — регистрации в приложении нет
 6. `pnpm dev`

@@ -1,7 +1,7 @@
 // Dumps the database into a folder on this machine (D17): by default
 // ~/way_of_life/backups, one pg_dump custom-format file per run, newest
 // BACKUP_KEEP kept. pg_dump runs in Docker so no local PostgreSQL client is
-// needed; its major version must be >= the server's (Neon defaults to 17).
+// needed; its major version must be >= the server's (production Neon is 18).
 import { spawn } from "node:child_process";
 import { createWriteStream } from "node:fs";
 import { chmod, mkdir, readdir, rename, rm, stat } from "node:fs/promises";
@@ -13,7 +13,7 @@ import { config } from "dotenv";
 config({ path: ".env.local", quiet: true });
 config({ path: ".env", quiet: true });
 
-const IMAGE = "postgres:17-alpine";
+const IMAGE = "postgres:18-alpine";
 const PREFIX = "way-of-life-";
 const SUFFIX = ".dump";
 

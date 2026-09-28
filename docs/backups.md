@@ -16,7 +16,7 @@ pnpm db:backup
 
 Скрипт [`scripts/backup.mjs`](../scripts/backup.mjs):
 
-- запускает `pg_dump --format=custom --no-owner` в контейнере `postgres:17-alpine`
+- запускает `pg_dump --format=custom --no-owner` в контейнере `postgres:18-alpine`
   (локальный клиент PostgreSQL не нужен; URL передаётся переменной окружения, а не аргументом);
 - проверяет дамп через `pg_restore --list`, иначе удаляет его;
 - пишет `way-of-life-<UTC-время>.dump` с правами `600` в папку с правами `700`;
@@ -31,7 +31,7 @@ pnpm db:backup
 В пустую базу (новая ветка Neon или локальный контейнер):
 
 ```bash
-docker run --rm -i postgres:17-alpine pg_restore --no-owner --exit-on-error -d "<url>" < ~/way_of_life/backups/way-of-life-….dump
+docker run --rm -i postgres:18-alpine pg_restore --no-owner --exit-on-error -d "<url>" < ~/way_of_life/backups/way-of-life-….dump
 ```
 
 Перед этим в целевой базе должна существовать роль `way_of_life_app` (SQL — в
