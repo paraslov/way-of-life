@@ -43,6 +43,7 @@ export const physiologySchema = settingsFields
     lthr: true,
     hrMax: true,
     weightKg: true,
+    rhrStartBaseline: true,
     proteinMinG: true,
     proteinMaxG: true,
   })

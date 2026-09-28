@@ -117,6 +117,23 @@ export function SettingsForm({ settings }: { settings: Settings }) {
         />
       </Field>
       <Field
+        id="rhrStartBaseline"
+        label={t("settings.rhrStartBaseline")}
+        help={t("settings.rhrStartBaselineHelp")}
+      >
+        <Input
+          id="rhrStartBaseline"
+          name="rhrStartBaseline"
+          type="number"
+          inputMode="numeric"
+          required
+          min={30}
+          max={100}
+          defaultValue={settings.rhrStartBaseline}
+          aria-describedby="rhrStartBaseline-help"
+        />
+      </Field>
+      <Field
         id="weightKg"
         label={t("settings.weightKg")}
         help={t("settings.weightHelp")}

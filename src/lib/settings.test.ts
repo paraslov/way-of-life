@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_SETTINGS, heartRateZones, resolveSettings } from "./settings";
+import {
+  DEFAULT_SETTINGS,
+  heartRateZones,
+  physiologySchema,
+  resolveSettings,
+} from "./settings";
 
 describe("heartRateZones", () => {
   it("reproduces the v5 table at LTHR 162", () => {
@@ -52,5 +57,29 @@ describe("stage 02 defaults", () => {
     expect(
       resolveSettings({ weekTemplate: ["rest", "rest"] }).weekTemplate,
     ).toEqual(DEFAULT_SETTINGS.weekTemplate);
+  });
+});
+
+describe("physiologySchema", () => {
+  const form = {
+    timezone: "Asia/Almaty",
+    lthr: 165,
+    hrMax: 184,
+    weightKg: null,
+    proteinMinG: 120,
+    proteinMaxG: 140,
+  };
+
+  it("accepts and bounds the starting RHR baseline", () => {
+    expect(
+      physiologySchema.safeParse({ ...form, rhrStartBaseline: 46 }).data
+        ?.rhrStartBaseline,
+    ).toBe(46);
+    expect(
+      physiologySchema.safeParse({ ...form, rhrStartBaseline: 20 }).success,
+    ).toBe(false);
+    expect(
+      physiologySchema.safeParse({ ...form, rhrStartBaseline: null }).success,
+    ).toBe(false);
   });
 });

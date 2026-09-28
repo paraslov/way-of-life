@@ -23,6 +23,7 @@ export async function saveSettingsAction(
     lthr: numberField(formData.get("lthr")),
     hrMax: numberField(formData.get("hrMax")),
     weightKg: numberField(formData.get("weightKg")),
+    rhrStartBaseline: numberField(formData.get("rhrStartBaseline")),
     proteinMinG: numberField(formData.get("proteinMinG")),
     proteinMaxG: numberField(formData.get("proteinMaxG")),
   });
