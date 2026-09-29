@@ -1,82 +1,35 @@
-import { getTranslations } from "next-intl/server";
-import { PageHeader } from "@/components/page-header";
-import { ActivityLog } from "@/components/today/activity-log";
-import { CheckinForm } from "@/components/today/checkin-form";
-import { DecisionCard } from "@/components/today/decision-card";
-import { RedFlagAlert } from "@/components/today/red-flag-alert";
-import { Verdict } from "@/components/today/verdict";
-import { formatDayTitle, formatShortDate } from "@/lib/date";
+import { TodayExperience } from "@/components/today/today-experience";
 import { getTodayView } from "@/lib/db/today";
+import { getWeekSummary } from "@/lib/db/week";
 import { buildDraft } from "@/lib/today/draft";
 
-export default async function TodayPage() {
-  const t = await getTranslations();
+export default async function TodayPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ phase?: string }>;
+}) {
   const view = await getTodayView();
-  const draft = buildDraft(view);
-  const { decision } = view;
-  const lastIntensity = decision?.snapshot.plan.lastIntensityDate;
-
+  const week = await getWeekSummary();
+  const query = await searchParams;
+  const hour = Number(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: view.settings.timezone,
+      hour: "2-digit",
+      hourCycle: "h23",
+    }).format(new Date()),
+  );
+  const initialPhase =
+    query.phase === "morning" || query.phase === "evening"
+      ? query.phase
+      : hour < 15
+        ? "morning"
+        : "evening";
   return (
-    <div className="max-w-[720px]">
-      <PageHeader
-        eyebrow={t("today.dateLine", {
-          date: formatDayTitle(view.date),
-          timeZone: view.settings.timezone,
-        })}
-        title={t("nav.today")}
-        description={t("pages.today")}
-      />
-
-      {view.checkin?.red_flags.length ? (
-        <div className="mt-6">
-          <RedFlagAlert flags={view.checkin.red_flags} />
-        </div>
-      ) : null}
-
-      {decision ? (
-        <div className="mt-6 space-y-4">
-          <Verdict snapshot={decision.snapshot} />
-          <DecisionCard
-            planned={t(`sessions.${decision.plannedSession}`)}
-            recommended={t(`actions.${decision.recommendedAction}`, {
-              hrCap: decision.snapshot.hrCap,
-            })}
-            reason={t(`decision.reasons.${decision.snapshot.reason}`)}
-            note={
-              decision.snapshot.plan.intensityTooSoon && lastIntensity
-                ? t("decision.intensityTooSoon", {
-                    date: formatShortDate(lastIntensity),
-                  })
-                : null
-            }
-            chosen={decision.chosenAction}
-            customText={decision.customText}
-          />
-        </div>
-      ) : null}
-
-      <section aria-labelledby="checkin-title" className="mt-6 space-y-3">
-        <h2
-          id="checkin-title"
-          className="font-mono text-[11px] tracking-[0.12em] text-muted-foreground uppercase"
-        >
-          {t("today.checkinTitle")}
-        </h2>
-        <CheckinForm
-          key={view.decision ? "saved" : "new"}
-          draft={draft}
-          allSymptoms={view.symptoms}
-          startCollapsed={view.decision !== null}
-          rhrStart={view.settings.rhrStartBaseline}
-        />
-      </section>
-
-      <div className="mt-8">
-        <ActivityLog
-          activities={view.activities}
-          steps={view.checkin?.steps ?? null}
-        />
-      </div>
-    </div>
+    <TodayExperience
+      view={view}
+      draft={buildDraft(view)}
+      week={week}
+      initialPhase={initialPhase}
+    />
   );
 }

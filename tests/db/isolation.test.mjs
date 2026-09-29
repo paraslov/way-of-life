@@ -9,6 +9,8 @@ const USER_TABLES = {
   user_settings: "INSERT INTO user_settings (user_id) VALUES ($1)",
   daily_checkins:
     "INSERT INTO daily_checkins (user_id, local_date) VALUES ($1, '2026-09-28')",
+  day_evenings:
+    "INSERT INTO day_evenings (user_id, local_date) VALUES ($1, '2026-09-28')",
   symptom_definitions:
     "INSERT INTO symptom_definitions (user_id, key, name, scale) VALUES ($1, 'knee', 'Колено', '0_10')",
   symptom_entries: `WITH d AS (
@@ -24,6 +26,10 @@ const USER_TABLES = {
   targets: `INSERT INTO targets
       (user_id, metric_key, period, minimum, target_min, target_max, unit, active_from)
     VALUES ($1, 'steps.daily', 'day', 7000, 8000, 12000, 'steps', '2026-09-28')`,
+  week_modes:
+    "INSERT INTO week_modes (user_id, week_start) VALUES ($1, '2026-09-28')",
+  weekly_reviews:
+    "INSERT INTO weekly_reviews (user_id, week_start) VALUES ($1, '2026-09-28')",
 };
 
 // Explicit environment only: never load a developer's .env.local here.

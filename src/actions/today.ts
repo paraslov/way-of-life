@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireCurrentUser } from "@/auth/session";
 import { ACTIVITY_TYPES } from "@/lib/activities";
+import { eveningSchema } from "@/lib/day/evening";
+import { saveEvening } from "@/lib/db/evening";
 import {
   addActivity,
   chooseAction,
@@ -69,7 +71,7 @@ export async function saveCheckinAction(
 
 const choiceSchema = z
   .object({
-    chosen: z.enum(CHOSEN_ACTIONS),
+    chosen: z.enum(CHOSEN_ACTIONS).nullable(),
     customText: z.string().trim().max(200).nullable(),
   })
   .refine((choice) => choice.chosen !== "custom" || choice.customText, {
@@ -82,7 +84,7 @@ export async function chooseActionAction(
 ): Promise<ActionState> {
   await requireCurrentUser();
   const parsed = choiceSchema.safeParse({
-    chosen: formData.get("chosen"),
+    chosen: textOrNull(formData.get("chosen")),
     customText: textOrNull(formData.get("customText")),
   });
   if (!parsed.success) return { status: "invalid" };
@@ -92,7 +94,7 @@ export async function chooseActionAction(
 
 const activitySchema = z.object({
   type: z.enum(ACTIVITY_TYPES),
-  durationMin: z.number().int().min(1).max(1440).nullable(),
+  durationMin: z.number().int().min(1).max(600).nullable(),
   rpe: z.number().int().min(1).max(10).nullable(),
 });
 
@@ -133,5 +135,24 @@ export async function saveStepsAction(
     .safeParse(numberOrNull(formData.get("steps")));
   if (!steps.success) return { status: "invalid" };
   await saveSteps(steps.data);
+  return done();
+}
+
+export async function saveEveningAction(
+  _previous: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await requireCurrentUser();
+  const parsed = eveningSchema.safeParse({
+    steps: numberOrNull(formData.get("steps")),
+    walkAfterMeal: numberOrNull(formData.get("walkAfterMeal")),
+    proteinBand: textOrNull(formData.get("proteinBand")),
+    fiberBand: textOrNull(formData.get("fiberBand")),
+    bedtimeTarget: textOrNull(formData.get("bedtimeTarget")),
+    decisionFit: textOrNull(formData.get("decisionFit")),
+    note: textOrNull(formData.get("note")),
+  });
+  if (!parsed.success) return { status: "invalid" };
+  await saveEvening(parsed.data);
   return done();
 }

@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useSavedFlash } from "@/components/use-saved-flash";
 import { RED_FLAGS } from "@/lib/decision/decision";
 import { HRV_STATUSES } from "@/lib/metrics/registry";
+import { formatHoursMinutes, parseHoursMinutes } from "@/lib/today/checkin";
 import type { CheckinDraft, SymptomDraft } from "@/lib/today/draft";
 
 type Field = Exclude<keyof CheckinDraft, "symptoms" | "fromPrevious">;
@@ -102,13 +103,21 @@ export function CheckinForm({
   draft,
   allSymptoms,
   startCollapsed,
+  recorded,
+  saveDisabled,
   rhrStart,
+  onDraftChange,
+  onSaved,
 }: {
   draft: CheckinDraft;
   /** Where the empty RHR stepper starts: the user's baseline. */
   rhrStart: number;
   allSymptoms: Omit<SymptomDraft, "severity" | "atRest" | "heartRate">[];
   startCollapsed: boolean;
+  recorded: boolean;
+  saveDisabled: boolean;
+  onDraftChange: (draft: CheckinDraft) => void;
+  onSaved: () => void;
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
@@ -119,25 +128,36 @@ export function CheckinForm({
   const [open, setOpen] = useState(!startCollapsed);
   const [values, setValues] = useState(draft);
   const [touched, setTouched] = useState<ReadonlySet<string>>(new Set());
+  const [redFlagsOpen, setRedFlagsOpen] = useState(draft.redFlags.length > 0);
+  const [noteOpen, setNoteOpen] = useState(Boolean(draft.note));
+
+  useEffect(() => {
+    setOpen(!startCollapsed);
+  }, [startCollapsed]);
 
   useEffect(() => {
     if (state.status === "saved") {
       flash();
       setTouched(new Set());
       setOpen(false);
+      onSaved();
     }
-  }, [state, flash]);
+  }, [state, flash, onSaved]);
 
   function set<K extends Field>(field: K, value: CheckinDraft[K]) {
-    setValues((current) => ({ ...current, [field]: value }));
+    const next = { ...values, [field]: value };
+    setValues(next);
+    onDraftChange(next);
     setTouched((current) => new Set(current).add(field));
   }
 
   function setSymptom(next: SymptomDraft) {
-    setValues((current) => ({
-      ...current,
-      symptoms: current.symptoms.map((s) => (s.id === next.id ? next : s)),
-    }));
+    const updated = {
+      ...values,
+      symptoms: values.symptoms.map((s) => (s.id === next.id ? next : s)),
+    };
+    setValues(updated);
+    onDraftChange(updated);
     setTouched((current) => new Set(current).add(next.id));
   }
 
@@ -153,23 +173,58 @@ export function CheckinForm({
 
   if (!open) {
     return (
-      <div className="flex flex-wrap items-center gap-3">
-        <Button type="button" variant="outline" onClick={() => setOpen(true)}>
-          {t("today.editCheckin")}
+      <div className="rounded-card border bg-card p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-base font-semibold">
+            {t(recorded ? "today.morningRecorded" : "today.morningNotRecorded")}
+          </h2>
+          {saved ? (
+            <output className="inline-flex items-center gap-1 text-sm text-signal-green">
+              <Check className="size-4" /> {t("common.saved")}
+            </output>
+          ) : null}
+        </div>
+        <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
+          {values.sleep ? (
+            <span className="rounded-button border px-2.5 py-1.5">
+              {t("today.sleep")} {values.sleep}
+            </span>
+          ) : null}
+          {values.rhr !== null ? (
+            <span className="rounded-button border px-2.5 py-1.5">
+              {t("today.rhr")} {values.rhr}
+            </span>
+          ) : null}
+          {values.hrvStatus ? (
+            <span className="rounded-button border px-2.5 py-1.5">
+              HRV {t(`hrvStatus.${values.hrvStatus}`)}
+            </span>
+          ) : null}
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-4 h-9"
+          onClick={() => setOpen(true)}
+        >
+          {t(recorded ? "today.editCheckin" : "today.openCheckin")}{" "}
           <ChevronDown className="size-4" />
         </Button>
-        {saved ? (
-          <output className="inline-flex items-center gap-1 text-sm text-signal-green">
-            <Check className="size-4" />
-            {t("common.saved")}
-          </output>
-        ) : null}
       </div>
     );
   }
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form
+      action={formAction}
+      className="space-y-3 rounded-card border bg-card p-5"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-base font-semibold">{t("today.checkinTitle")}</h2>
+        <span className="font-mono text-[10px] tracking-wider text-muted-foreground">
+          {t("today.morningTime")}
+        </span>
+      </div>
       {draft.fromPrevious ? (
         <p className="text-sm text-muted-foreground">
           {t("today.checkinHint")}
@@ -209,6 +264,9 @@ export function CheckinForm({
         </span>
       ))}
 
+      <p className="pt-1 font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
+        {t("today.garminGroup")}
+      </p>
       <div className={SECTION}>
         <FieldRow
           label={t("today.sleep")}
@@ -218,6 +276,19 @@ export function CheckinForm({
           }
         >
           <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              className="h-11 min-w-11 rounded-button border px-2 font-mono text-xs"
+              onClick={() => {
+                const minutes = parseHoursMinutes(values.sleep);
+                set(
+                  "sleep",
+                  formatHoursMinutes(Math.max(0, (minutes ?? 0) - 15)),
+                );
+              }}
+            >
+              −15
+            </button>
             <input
               id="sleep"
               name="sleep"
@@ -228,6 +299,19 @@ export function CheckinForm({
               value={values.sleep}
               onChange={(event) => set("sleep", event.target.value)}
             />
+            <button
+              type="button"
+              className="h-11 min-w-11 rounded-button border px-2 font-mono text-xs"
+              onClick={() => {
+                const minutes = parseHoursMinutes(values.sleep);
+                set(
+                  "sleep",
+                  formatHoursMinutes(Math.min(1080, (minutes ?? 405) + 15)),
+                );
+              }}
+            >
+              +15
+            </button>
             <ClearButton
               visible={values.sleep !== ""}
               onClear={() => set("sleep", "")}
@@ -269,6 +353,9 @@ export function CheckinForm({
         </FieldRow>
       </div>
 
+      <p className="pt-1 font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
+        {t("today.wellbeingGroup")}
+      </p>
       <div className={SECTION}>
         <FieldRow
           label={t("today.energy")}
@@ -327,36 +414,34 @@ export function CheckinForm({
         ))}
         {addable.length > 0 ? (
           <div className="py-3">
-            <select
-              aria-label={t("today.addSymptom")}
-              className="h-11 rounded-input border bg-background px-3 text-sm"
-              value=""
-              onChange={(event) => {
-                const symptom = addable.find(
-                  (s) => s.id === event.target.value,
-                );
-                if (!symptom) return;
-                setValues((current) => ({
-                  ...current,
-                  symptoms: [
-                    ...current.symptoms,
-                    {
-                      ...symptom,
-                      severity: symptom.scale === "bool" ? 1 : null,
-                      atRest: false,
-                      heartRate: null,
-                    },
-                  ],
-                }));
-              }}
-            >
-              <option value="">{t("today.addSymptom")}</option>
-              {addable.map((symptom) => (
-                <option key={symptom.id} value={symptom.id}>
-                  {symptom.name}
-                </option>
-              ))}
-            </select>
+            <span className="mr-2 text-sm text-muted-foreground">
+              {t("today.addSymptom")}
+            </span>
+            {addable.map((symptom) => (
+              <button
+                key={symptom.id}
+                type="button"
+                className="mr-1.5 mb-1.5 h-9 rounded-button border border-dashed px-3 text-sm"
+                onClick={() => {
+                  const next = {
+                    ...values,
+                    symptoms: [
+                      ...values.symptoms,
+                      {
+                        ...symptom,
+                        severity: symptom.scale === "bool" ? 1 : null,
+                        atRest: false,
+                        heartRate: null,
+                      },
+                    ],
+                  };
+                  setValues(next);
+                  onDraftChange(next);
+                }}
+              >
+                + {symptom.name}
+              </button>
+            ))}
           </div>
         ) : null}
       </div>
@@ -387,29 +472,28 @@ export function CheckinForm({
               onChange={(value) => set("hrvMs", value)}
             />
           </FieldRow>
-          <div className="space-y-1.5 py-3">
-            <label htmlFor="note" className="text-sm font-medium">
-              {t("today.note")}
-            </label>
-            <textarea
-              id="note"
-              name="note"
-              rows={2}
-              maxLength={2000}
-              className="w-full rounded-input border bg-background px-3 py-2 text-base"
-              value={values.note}
-              onChange={(event) => set("note", event.target.value)}
-            />
-          </div>
         </div>
       </details>
 
       <details
         className="rounded-card border border-signal-red-border bg-background px-4 min-[480px]:px-5"
-        open={values.redFlags.length > 0}
+        open={redFlagsOpen}
+        onToggle={(event) => setRedFlagsOpen(event.currentTarget.open)}
       >
         <summary className="cursor-pointer py-3 text-sm font-medium">
           {t("today.redFlagsTitle")}
+          {" · "}
+          <span
+            className={
+              values.redFlags.length
+                ? "text-signal-red"
+                : "text-muted-foreground"
+            }
+          >
+            {values.redFlags.length
+              ? t("today.redFlagsCount", { count: values.redFlags.length })
+              : t("today.none")}
+          </span>
         </summary>
         <div className="space-y-2 border-t py-3">
           <p className="text-xs text-muted-foreground">
@@ -436,11 +520,40 @@ export function CheckinForm({
         </div>
       </details>
 
+      <details
+        className="rounded-card border bg-background px-4 min-[480px]:px-5"
+        open={noteOpen}
+        onToggle={(event) => setNoteOpen(event.currentTarget.open)}
+      >
+        <summary className="cursor-pointer py-3 text-sm font-medium">
+          {t("today.note")}
+        </summary>
+        <div className="space-y-1.5 border-t py-3">
+          <label htmlFor="note" className="sr-only">
+            {t("today.note")}
+          </label>
+          <textarea
+            id="note"
+            name="note"
+            rows={2}
+            maxLength={2000}
+            className="w-full rounded-input border bg-field px-3 py-2 text-base"
+            value={values.note}
+            onChange={(event) => set("note", event.target.value)}
+          />
+        </div>
+      </details>
+
       <div className="flex flex-wrap items-center gap-3">
-        <Button type="submit" size="lg" disabled={pending}>
+        <Button type="submit" size="lg" disabled={pending || saveDisabled}>
           {pending ? <Loader2 className="size-4 animate-spin" /> : null}
           {pending ? t("common.saving") : t("today.saveCheckin")}
         </Button>
+        {saveDisabled ? (
+          <span className="text-xs text-muted-foreground">
+            {t("today.firstInputHint")}
+          </span>
+        ) : null}
         {startCollapsed ? (
           <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
             {t("today.hideCheckin")}

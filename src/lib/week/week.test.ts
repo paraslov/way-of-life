@@ -77,8 +77,8 @@ describe("summarizeWeek", () => {
       { local_date: "2026-10-20", type: "walk_after_meal", duration_min: 20 },
     ],
     days: [
-      { local_date: "2026-10-19", sleep_minutes: 400, steps: 9000 },
-      { local_date: "2026-10-20", sleep_minutes: 440, steps: null },
+      { local_date: "2026-10-19", sleep_minutes: 400, steps: 9000, energy: 3 },
+      { local_date: "2026-10-20", sleep_minutes: 440, steps: null, energy: 4 },
       { local_date: "2026-10-21", sleep_minutes: null, steps: 11000 },
     ],
     verdicts: [
@@ -127,6 +127,7 @@ describe("summarizeWeek", () => {
       fact: null,
       status: "unknown",
     });
+    expect(summary.energyAverage).toBe(3.5);
   });
 
   it("keeps the target order", () => {

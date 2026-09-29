@@ -1,5 +1,6 @@
 import type { ActivityType } from "@/lib/activities";
 import { idToDate, shiftId } from "@/lib/date";
+import type { PlannedSession, WeekTemplate } from "@/lib/decision/sessions";
 import type { LightState } from "@/lib/light/light";
 import type { MetricKey } from "@/lib/metrics/registry";
 
@@ -28,8 +29,19 @@ export type WeekDay = {
   local_date: string;
   sleep_minutes: number | null;
   steps: number | null;
+  energy?: number | null;
 };
 export type WeekVerdict = { local_date: string; verdict: LightState };
+export type WeekDecision = WeekVerdict & {
+  planned_session: PlannedSession;
+  recommended_action: string;
+  chosen_action: string | null;
+};
+export type WeekEvening = {
+  local_date: string;
+  protein_band: string | null;
+  fiber_band: string | null;
+};
 
 export type TargetStatus = "unknown" | "below" | "minimum" | "target" | "above";
 
@@ -41,6 +53,9 @@ export type TargetLine = {
   targetMin: number;
   targetMax: number;
   status: TargetStatus;
+  /** Most recent categorical answer, never treated as exact grams. */
+  band?: string | null;
+  bandDays?: number;
 };
 
 export type DayCell = {
@@ -48,6 +63,10 @@ export type DayCell = {
   verdict: LightState | null;
   isToday: boolean;
   isFuture: boolean;
+  plannedSession?: PlannedSession;
+  recommendedAction?: string | null;
+  chosenAction?: string | null;
+  activities?: WeekActivity[];
 };
 
 export type WeekSummary = {
@@ -55,6 +74,7 @@ export type WeekSummary = {
   end: string;
   lines: TargetLine[];
   days: DayCell[];
+  energyAverage: number | null;
 };
 
 /** Minutes of these count as aerobic (Z2 and above). */
@@ -80,11 +100,14 @@ export function weekStart(date: string): string {
   return shiftId(date, -((idToDate(date).getUTCDay() + 6) % 7));
 }
 
-function mean(values: (number | null)[]): number | null {
+function mean(values: (number | null)[], decimals = 0): number | null {
   const known = values.filter((value): value is number => value !== null);
   if (known.length === 0) return null;
-  return Math.round(
-    known.reduce((sum, value) => sum + value, 0) / known.length,
+  const scale = 10 ** decimals;
+  return (
+    Math.round(
+      (known.reduce((sum, value) => sum + value, 0) / known.length) * scale,
+    ) / scale
   );
 }
 
@@ -160,6 +183,9 @@ export function summarizeWeek(input: {
   activities: readonly WeekActivity[];
   days: readonly WeekDay[];
   verdicts: readonly WeekVerdict[];
+  decisions?: readonly WeekDecision[];
+  evenings?: readonly WeekEvening[];
+  weekTemplate?: WeekTemplate;
   /** Display order of the metrics. */
   order: readonly MetricKey[];
 }): WeekSummary {
@@ -169,6 +195,7 @@ export function summarizeWeek(input: {
     rows.filter((row) => row.local_date >= start && row.local_date <= end);
   const activities = inWeek(input.activities);
   const days = inWeek(input.days);
+  const evenings = inWeek(input.evenings ?? []);
 
   const lines = activeTargets(input.targets, start)
     .filter((row): row is TargetRow & { metric_key: MetricKey } =>
@@ -185,17 +212,33 @@ export function summarizeWeek(input: {
         targetMin: Number(row.target_min),
         targetMax: Number(row.target_max),
       };
+      const bandKey =
+        row.metric_key === "protein.daily"
+          ? "protein_band"
+          : row.metric_key === "fiber.daily"
+            ? "fiber_band"
+            : null;
+      const bands = bandKey
+        ? evenings
+            .map((entry) => entry[bandKey])
+            .filter((band): band is string => band !== null)
+        : [];
       return {
         metricKey: row.metric_key,
         period: row.period,
         fact: value,
         ...target,
         status: targetStatus(value, target),
+        band: bands.at(-1) ?? null,
+        bandDays: bands.length,
       };
     });
 
   const verdicts = new Map(
     input.verdicts.map((v) => [v.local_date, v.verdict]),
+  );
+  const decisions = new Map(
+    (input.decisions ?? []).map((d) => [d.local_date, d]),
   );
   const cells = Array.from({ length: 7 }, (_, index): DayCell => {
     const date = shiftId(start, index);
@@ -204,8 +247,22 @@ export function summarizeWeek(input: {
       verdict: verdicts.get(date) ?? null,
       isToday: date === input.today,
       isFuture: date > input.today,
+      plannedSession:
+        decisions.get(date)?.planned_session ?? input.weekTemplate?.[index],
+      recommendedAction: decisions.get(date)?.recommended_action ?? null,
+      chosenAction: decisions.get(date)?.chosen_action ?? null,
+      activities: activities.filter((activity) => activity.local_date === date),
     };
   });
 
-  return { start, end, lines, days: cells };
+  return {
+    start,
+    end,
+    lines,
+    days: cells,
+    energyAverage: mean(
+      days.map((day) => day.energy ?? null),
+      1,
+    ),
+  };
 }

@@ -11,11 +11,14 @@ import { withCurrentUserDb } from "@/lib/db/user-context";
 export const USER_DATA_TABLES = [
   "user_settings",
   "daily_checkins",
+  "day_evenings",
   "symptom_definitions",
   "symptom_entries",
   "day_decisions",
   "activities",
   "targets",
+  "week_modes",
+  "weekly_reviews",
 ] as const;
 
 export type UserDataExport = {

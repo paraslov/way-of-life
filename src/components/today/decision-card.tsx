@@ -2,7 +2,7 @@
 
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { type ActionState, chooseActionAction } from "@/actions/today";
 import { Button } from "@/components/ui/button";
 import { CHOSEN_ACTIONS, type ChosenAction } from "@/lib/decision/decision";
@@ -20,6 +20,7 @@ export function DecisionCard({
   note,
   chosen,
   customText,
+  preview = false,
 }: {
   planned: string;
   recommended: string;
@@ -27,6 +28,7 @@ export function DecisionCard({
   note: string | null;
   chosen: ChosenAction | null;
   customText: string | null;
+  preview?: boolean;
 }) {
   const t = useTranslations("decision");
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
@@ -34,6 +36,7 @@ export function DecisionCard({
     {},
   );
   const [custom, setCustom] = useState(chosen === "custom");
+  useEffect(() => setCustom(chosen === "custom"), [chosen]);
 
   return (
     <section
@@ -59,20 +62,25 @@ export function DecisionCard({
 
       <form action={formAction} className="mt-4 space-y-3">
         <p className="text-sm">{t("chooseHint")}</p>
-        <div className="grid grid-cols-2 gap-2 min-[560px]:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2">
           {CHOSEN_ACTIONS.map((action) => {
             const selected = chosen === action;
             return action === "custom" ? (
               <Button
                 key={action}
-                type="button"
+                type={selected ? "submit" : "button"}
+                name={selected ? "chosen" : undefined}
+                value={selected ? "" : undefined}
                 variant="outline"
                 aria-pressed={selected}
+                disabled={preview}
                 className={cn(
                   "h-11",
                   selected && "border-foreground ring-1 ring-foreground",
                 )}
-                onClick={() => setCustom(true)}
+                onClick={() => {
+                  if (!selected) setCustom(true);
+                }}
               >
                 {t(`choices.${action}`)}
               </Button>
@@ -81,10 +89,10 @@ export function DecisionCard({
                 key={action}
                 type="submit"
                 name="chosen"
-                value={action}
+                value={selected ? "" : action}
                 variant="outline"
                 aria-pressed={selected}
-                disabled={pending}
+                disabled={pending || preview}
                 className={cn(
                   "h-11",
                   selected && "border-foreground ring-1 ring-foreground",
@@ -110,7 +118,7 @@ export function DecisionCard({
               name="chosen"
               value="custom"
               className="h-11"
-              disabled={pending}
+              disabled={pending || preview}
             >
               {t("customSave")}
             </Button>
@@ -123,6 +131,8 @@ export function DecisionCard({
             <p role="alert" className="text-destructive">
               {t("invalid")}
             </p>
+          ) : preview ? (
+            <p className="text-muted-foreground">{t("saveMorningFirst")}</p>
           ) : chosen ? (
             <output className="text-muted-foreground">
               {t("chosen", {
@@ -132,7 +142,9 @@ export function DecisionCard({
                     : t(`choices.${chosen}`),
               })}
             </output>
-          ) : null}
+          ) : (
+            <p className="text-muted-foreground">{t("notChosenYet")}</p>
+          )}
         </div>
       </form>
     </section>

@@ -123,6 +123,11 @@ describe("today repository", () => {
       chosenAction: "skip",
       customText: null,
     });
+    await as((c) => chooseActionFor(c, MON, null, null));
+    expect((await load(MON)).decision).toMatchObject({
+      chosenAction: null,
+      customText: null,
+    });
     expect(await as((c) => chooseActionFor(c, WED, "accept", null))).toBe(
       false,
     );

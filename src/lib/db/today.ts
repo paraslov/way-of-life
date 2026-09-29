@@ -3,7 +3,9 @@ import "server-only";
 import type { PoolClient } from "pg";
 import type { ActivityType } from "@/lib/activities";
 import { shiftId, todayId } from "@/lib/date";
+import type { EveningRow } from "@/lib/day/evening";
 import { ensureUserDefaults } from "@/lib/db/defaults";
+import { getEveningFor } from "@/lib/db/evening";
 import { withCurrentUserDb } from "@/lib/db/user-context";
 import { readSettings } from "@/lib/db/user-settings";
 import {
@@ -16,7 +18,7 @@ import {
   type RedFlag,
 } from "@/lib/decision/decision";
 import type { PlannedSession } from "@/lib/decision/sessions";
-import { evaluateLight } from "@/lib/light/light";
+import { type DayObservations, evaluateLight } from "@/lib/light/light";
 import type { Settings } from "@/lib/settings";
 import {
   type CheckinInput,
@@ -72,6 +74,9 @@ export type TodayView = {
   previousEntries: SymptomEntryRow[];
   decision: StoredDecision | null;
   activities: ActivityRow[];
+  evening: EveningRow | null;
+  history: DayObservations[];
+  lastIntensityDate: string | null;
 };
 
 async function checkinsBetween(
@@ -275,12 +280,14 @@ export async function saveCheckinFor(
 export async function chooseActionFor(
   client: PoolClient,
   date: string,
-  chosen: ChosenAction,
+  chosen: ChosenAction | null,
   customText: string | null,
 ): Promise<boolean> {
   const result = await client.query(
     `UPDATE day_decisions
-        SET chosen_action = $2, custom_text = $3, decided_at = now(), updated_at = now()
+        SET chosen_action = $2, custom_text = $3,
+            decided_at = CASE WHEN $2::text IS NULL THEN NULL ELSE now() END,
+            updated_at = now()
       WHERE local_date = $1`,
     [date, chosen, chosen === "custom" ? customText : null],
   );
@@ -370,6 +377,35 @@ export async function loadTodayFor(
       [date],
     )
   ).rows;
+  const evening = (await getEveningFor(client, date)).rows[0] ?? null;
+  const historyRows = await checkinsBetween(
+    client,
+    shiftId(date, -HISTORY_DAYS),
+    shiftId(date, -1),
+  );
+  const historyEntries = await entriesBetween(
+    client,
+    shiftId(date, -HISTORY_DAYS),
+    shiftId(date, -1),
+  );
+  const historyByDate = new Map(
+    historyRows.map((row) => [row.local_date, row]),
+  );
+  const historyDates = new Set([
+    ...historyRows.map((row) => row.local_date),
+    ...historyEntries.map((entry) => entry.local_date),
+  ]);
+  const history = [...historyDates]
+    .sort()
+    .map((day) => toObservations(day, historyByDate.get(day), historyEntries));
+  const lastIntensityDate =
+    (
+      await client.query<{ day: string | null }>(
+        `SELECT max(local_date)::text AS day FROM activities
+        WHERE type = 'intensity' AND local_date < $1`,
+        [date],
+      )
+    ).rows[0]?.day ?? null;
 
   return {
     date,
@@ -381,6 +417,9 @@ export async function loadTodayFor(
     previousEntries,
     decision: decisionRow ? toStoredDecision(decisionRow) : null,
     activities,
+    evening,
+    history,
+    lastIntensityDate,
   };
 }
 
@@ -411,7 +450,10 @@ export function saveCheckin(input: CheckinInput) {
   );
 }
 
-export function chooseAction(chosen: ChosenAction, customText: string | null) {
+export function chooseAction(
+  chosen: ChosenAction | null,
+  customText: string | null,
+) {
   return onUserToday((client, _userId, date) =>
     chooseActionFor(client, date, chosen, customText),
   );

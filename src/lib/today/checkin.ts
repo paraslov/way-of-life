@@ -41,14 +41,11 @@ export const checkinSchema = z.object({
 
 export type CheckinInput = z.infer<typeof checkinSchema>;
 
-/**
- * `7:05`, `7.05`, `7,05` or `7` hours → minutes; "" → null; anything else →
- * undefined. Minutes need two digits: `6,5` could mean 6:05 or 6:30.
- */
+/** `7:05`, `7.05`, `7,05`, `705` or `7` hours → minutes. */
 export function parseHoursMinutes(value: string): number | null | undefined {
   const text = value.trim();
   if (text === "") return null;
-  const match = /^(\d{1,2})(?:[:.,](\d{2}))?$/.exec(text);
+  const match = /^(\d{1,2})(?:[:.,]?(\d{2}))?$/.exec(text);
   if (!match) return undefined;
   const hours = Number(match[1]);
   const minutes = Number(match[2] ?? 0);
