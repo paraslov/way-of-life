@@ -49,7 +49,7 @@ describe("checkinSchema", () => {
   });
 
   it("rejects values outside the registry ranges and unknown flags", () => {
-    expect(checkinSchema.safeParse({ ...empty, energy: 6 }).success).toBe(
+    expect(checkinSchema.safeParse({ ...empty, energy: 11 }).success).toBe(
       false,
     );
     expect(checkinSchema.safeParse({ ...empty, rhr: Number.NaN }).success).toBe(

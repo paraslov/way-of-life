@@ -87,7 +87,7 @@ describe("today repository", () => {
     const view = await load(MON);
     expect(view.checkin).toMatchObject({ sleep_minutes: 330, rhr: 49 });
     expect(view.decision).toMatchObject({
-      ruleVersion: "1.0",
+      ruleVersion: "1.1",
       plannedSession: "strength_a",
       recommendedAction: "rest_or_walk",
       chosenAction: null,

@@ -88,6 +88,7 @@ describe("design day data", () => {
         fiberBand: null,
         bedtimeTarget: null,
         decisionFit: "less",
+        mood: "irritable",
         note: "После нагрузки устал",
       }),
     );
@@ -98,6 +99,7 @@ describe("design day data", () => {
       protein_band: "120_140",
       fiber_band: null,
       decision_fit: "less",
+      mood: "irritable",
     });
     expect(view.decision?.snapshot).toEqual(before);
     await as((client) =>
@@ -108,12 +110,14 @@ describe("design day data", () => {
         fiberBand: null,
         bedtimeTarget: null,
         decisionFit: null,
+        mood: null,
         note: null,
       }),
     );
     const cleared = await as((client) => loadTodayFor(client, userId, DAY));
     expect(cleared.checkin?.steps).toBeNull();
     expect(cleared.evening?.walk_after_meal).toBeNull();
+    expect(cleared.evening?.mood).toBeNull();
   });
 
   it("shows saved plan and mode while retaining categorical evening bands", async () => {

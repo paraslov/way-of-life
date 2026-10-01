@@ -8,7 +8,7 @@ import type { HrvStatus } from "@/lib/metrics/registry";
  * states with the numbers behind them plus the verdict. There is no score.
  * Red flags are not handled here: they sit outside the light.
  */
-export const RULES_VERSION = "1.0";
+export const RULES_VERSION = "1.1";
 
 export type LightState = "green" | "yellow" | "red" | "unknown";
 

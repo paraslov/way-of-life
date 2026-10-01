@@ -53,7 +53,7 @@ export type DraftSource = {
 };
 
 /** A row counts as a morning check-in once any morning field is set. */
-function isMorning(row: CheckinRow | null): row is CheckinRow {
+export function isMorning(row: CheckinRow | null): row is CheckinRow {
   return (
     row !== null &&
     [

@@ -9,6 +9,14 @@ export const PROTEIN_BANDS = [
 export const FIBER_BANDS = ["under_20", "20_25", "25_35", "over_35"] as const;
 export const BEDTIME_TARGETS = ["22_30", "23_00", "23_30", "later"] as const;
 export const DECISION_FITS = ["ok", "more", "less"] as const;
+/** Calm ↔ irritability over the day, worst first (D26). */
+export const MOODS = [
+  "very_irritable",
+  "irritable",
+  "normal",
+  "calm",
+  "positive",
+] as const;
 
 export const eveningSchema = z.object({
   steps: z.number().int().min(0).max(100_000).nullable(),
@@ -17,6 +25,7 @@ export const eveningSchema = z.object({
   fiberBand: z.enum(FIBER_BANDS).nullable(),
   bedtimeTarget: z.enum(BEDTIME_TARGETS).nullable(),
   decisionFit: z.enum(DECISION_FITS).nullable(),
+  mood: z.enum(MOODS).nullable(),
   note: z.string().trim().max(2000).nullable(),
 });
 
@@ -28,5 +37,6 @@ export type EveningRow = {
   fiber_band: EveningInput["fiberBand"];
   bedtime_target: EveningInput["bedtimeTarget"];
   decision_fit: EveningInput["decisionFit"];
+  mood: EveningInput["mood"];
   note: string | null;
 };

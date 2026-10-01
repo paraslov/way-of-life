@@ -43,7 +43,7 @@
 
 ```text
 daily_checkins   user_id, local_date (uniq с user_id), sleep_minutes, sleep_score, bed_at, wake_at,
-                 rhr, hrv_ms, hrv_status(balanced|unbalanced|low|poor|null), energy(1–5), desire(1–3),
+                 rhr, hrv_ms, hrv_status(balanced|unbalanced|low|poor|null), energy(1–10), desire(1–3),
                  legs(1–3), steps, red_flags text[], note, source, created_at, updated_at
 symptom_definitions  id, user_id, key, name, scale(0_10|bool), pinned, archived, sort
 symptom_entries  id, user_id, local_date, symptom_id, severity, context(rest|exercise), heart_rate, note
@@ -106,7 +106,7 @@ targets          id, user_id, metric_key, period(day|week), minimum, target_min,
 - Какие поля пропускаются чаще всего:
 - Sleep Score нужен?
 - HRV вручную — терпимо?
-- Энергия 1–5 — хватает?
+- Энергия 1–10 утром и спокойствие вечером — удобно, меняют ли решения?
 - Как часто `chosen ≠ recommended` и почему:
 - Что раздражает:
 - Что поменять в правилах (→ `rules-v2`):
@@ -174,3 +174,4 @@ targets          id, user_id, metric_key, period(day|week), minimum, target_min,
 | 28.09.2026 | Стартовый baseline RHR (48) редактируется в настройках рядом с LTHR и HRmax; новое значение действует со следующего сохранения чек-ина, прошлые решения не пересчитываются | Запрос пользователя: число должно быть видно и поправимо, а не спрятано в defaults |
 | 29.09.2026 | Полученный хэндофф передан в 02b (день и журнал) и 05 (неделя), не добавлен в 02.V | Сначала деплой и гейт V0.2; дизайн добавляет новые данные и не должен задерживать проверку текущего среза |
 | 29.09.2026 | По D20 дизайн 02b и экрана недели внедрён раньше гейта, без изменения критериев 02.V | Прямой запрос пользователя; оценку реального времени ввода и полезности светофора всё ещё проводим на живом использовании |
+| 30.09.2026 | Энергия 1–10 вместо 1–5 (миграция `0004`, ответы ×2, `RULES_VERSION` 1.1); решение дня окончательно в конце локального дня | D25, D26 |

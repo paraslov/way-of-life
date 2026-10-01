@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { PastDayDialog } from "@/components/journal/past-day-dialog";
 import { PageHeader } from "@/components/page-header";
 import { SignalIcon, STATE_TEXT } from "@/components/today/signal-badge";
 import { signalReason } from "@/components/today/verdict";
 import { formatDayTitle } from "@/lib/date";
 import { getJournal, type JournalRange } from "@/lib/db/journal";
+import { getPastDayView } from "@/lib/db/past-day";
 import type { LightState } from "@/lib/light/light";
 import { formatHoursMinutes } from "@/lib/today/checkin";
+import { buildDraft, isMorning } from "@/lib/today/draft";
 import { cn } from "@/lib/utils";
 
 const LIGHTS = ["all", "green", "yellow", "red", "unknown"] as const;
@@ -47,6 +50,7 @@ export default async function JournalPage({
     light?: LightFilter;
     changed?: boolean;
     day?: string | null;
+    edit?: string;
   }) => {
     const params = new URLSearchParams();
     params.set("range", String(next.range ?? range));
@@ -55,8 +59,12 @@ export default async function JournalPage({
     if (next.changed ?? changed) params.set("changed", "1");
     const day = next.day === undefined ? open : next.day;
     if (day) params.set("day", day);
+    if (next.edit) params.set("edit", next.edit);
     return `/journal?${params.toString()}`;
   };
+  // The fill-in dialog (D27); a date outside the window loads nothing.
+  const edit = typeof query.edit === "string" ? query.edit : null;
+  const pastView = edit ? await getPastDayView(edit) : null;
 
   return (
     <div className="max-w-[1000px]">
@@ -127,7 +135,9 @@ export default async function JournalPage({
             const expanded = open === day.date;
             const recommendation = day.recommendedAction
               ? t(`actions.${day.recommendedAction}`, { hrCap: day.hrCap ?? 0 })
-              : t("journal.noCheckin");
+              : day.late?.kind === "filled"
+                ? t("journal.filledLater")
+                : t("journal.noCheckin");
             const planned = day.plannedSession
               ? t(`sessions.${day.plannedSession}`)
               : null;
@@ -137,10 +147,12 @@ export default async function JournalPage({
                 : day.chosenAction
                   ? t(`decision.choices.${day.chosenAction}`)
                   : null;
-            const reasons =
-              day.snapshot?.light.signals.filter(
-                (signal) => signal.state !== "green",
-              ) ?? [];
+            const signals =
+              day.snapshot?.light.signals ??
+              (day.late?.kind === "filled" ? day.late.light.signals : []);
+            const reasons = signals.filter(
+              (signal) => signal.state !== "green",
+            );
             return (
               <li key={day.date} className={expanded ? "bg-field" : ""}>
                 <Link
@@ -210,11 +222,25 @@ export default async function JournalPage({
                         </ul>
                       ) : (
                         <p className="mt-2 text-muted-foreground">
-                          {day.snapshot
+                          {day.snapshot || day.late?.kind === "filled"
                             ? t("journal.allNormal")
                             : t("journal.noCheckin")}
                         </p>
                       )}
+                      {day.late?.kind === "filled" ? (
+                        <p className="mt-3 font-mono text-[11px] text-muted-foreground">
+                          {t("journal.filledLaterNote")}
+                        </p>
+                      ) : null}
+                      {day.late?.kind === "corrected" ? (
+                        <p className="mt-3 text-muted-foreground">
+                          {t("journal.correctedLater", {
+                            verdict: t(
+                              `light.verdict.${day.late.light.verdict}`,
+                            ),
+                          })}
+                        </p>
+                      ) : null}
                       {day.ruleVersion ? (
                         <p className="mt-3 font-mono text-[11px] text-muted-foreground">
                           {t("light.rulesVersion", {
@@ -251,6 +277,12 @@ export default async function JournalPage({
                             )
                           : "—"}
                       </p>
+                      {day.evening?.mood ? (
+                        <p>
+                          {t("evening.mood")} ·{" "}
+                          {t(`evening.moods.${day.evening.mood}`)}
+                        </p>
+                      ) : null}
                       {day.checkin?.steps != null ? (
                         <p>
                           {t("evening.steps")} ·{" "}
@@ -295,6 +327,15 @@ export default async function JournalPage({
                           «{day.evening.note}»
                         </p>
                       ) : null}
+                      {day.editable ? (
+                        <Link
+                          href={href({ day: day.date, edit: day.date })}
+                          scroll={false}
+                          className="mt-2 inline-flex h-9 items-center rounded-button border bg-background px-3 text-[13px] font-medium hover:bg-accent"
+                        >
+                          {t("journal.editDay")}
+                        </Link>
+                      ) : null}
                     </div>
                   </div>
                 ) : null}
@@ -303,6 +344,29 @@ export default async function JournalPage({
           })}
         </ol>
       )}
+      {pastView ? (
+        <PastDayDialog
+          date={pastView.date}
+          draft={buildDraft({
+            ...pastView,
+            previous: null,
+            previousEntries: [],
+          })}
+          symptoms={pastView.symptoms}
+          rhrStart={pastView.settings.rhrStartBaseline}
+          recorded={isMorning(pastView.checkin)}
+          activities={pastView.activities}
+          steps={pastView.checkin?.steps ?? null}
+          evening={pastView.evening}
+          chosen={
+            pastView.decision?.chosenAction
+              ? t(`decision.choices.${pastView.decision.chosenAction}`)
+              : null
+          }
+          hadDecision={pastView.decision !== null}
+          closeHref={href({ day: pastView.date })}
+        />
+      ) : null}
     </div>
   );
 }

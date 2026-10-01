@@ -52,8 +52,8 @@ describe("metric registry", () => {
   it("validates keys and ranges", () => {
     expect(isMetricKey("sleep.duration")).toBe(true);
     expect(isMetricKey("toString")).toBe(false);
-    expect(inRange("energy.morning", 5)).toBe(true);
-    expect(inRange("energy.morning", 6)).toBe(false);
+    expect(inRange("energy.morning", 10)).toBe(true);
+    expect(inRange("energy.morning", 11)).toBe(false);
     expect(inRange("aerobic.minutes", 9999)).toBe(true);
   });
 });

@@ -77,7 +77,7 @@ describe("decideDay", () => {
       plannedSession: "strength_a",
       recommendedAction: "strength_a",
       reason: "as_planned",
-      ruleVersion: "1.0",
+      ruleVersion: "1.1",
       hrCap: 151,
     });
   });
@@ -142,7 +142,7 @@ describe("decideDay", () => {
   it("freezes inputs, signals and rule version in the snapshot", () => {
     const decision = decide(MON, "green", { redFlags: [] });
     expect(decision.snapshot).toMatchObject({
-      rulesVersion: "1.0",
+      rulesVersion: "1.1",
       observations: { date: MON },
       light: { verdict: "green" },
       hrCap: 151,

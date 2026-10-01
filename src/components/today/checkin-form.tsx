@@ -108,6 +108,7 @@ export function CheckinForm({
   rhrStart,
   onDraftChange,
   onSaved,
+  date,
 }: {
   draft: CheckinDraft;
   /** Where the empty RHR stepper starts: the user's baseline. */
@@ -118,6 +119,8 @@ export function CheckinForm({
   saveDisabled: boolean;
   onDraftChange: (draft: CheckinDraft) => void;
   onSaved: () => void;
+  /** A finished day being filled in (D27): no red flags, no decision. */
+  date?: string;
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
@@ -231,6 +234,7 @@ export function CheckinForm({
         </p>
       ) : null}
 
+      {date ? <input type="hidden" name="date" value={date} /> : null}
       <input type="hidden" name="sleepScore" value={values.sleepScore ?? ""} />
       <input type="hidden" name="rhr" value={values.rhr ?? ""} />
       <input type="hidden" name="hrvMs" value={values.hrvMs ?? ""} />
@@ -365,9 +369,9 @@ export function CheckinForm({
         >
           <Segmented
             label={t("today.energy")}
-            options={[1, 2, 3, 4, 5].map((value) => ({
-              value,
-              label: String(value),
+            options={Array.from({ length: 10 }, (_, i) => ({
+              value: i + 1,
+              label: String(i + 1),
             }))}
             value={values.energy}
             onChange={(value) => set("energy", value)}
@@ -476,6 +480,7 @@ export function CheckinForm({
       </details>
 
       <details
+        hidden={Boolean(date)}
         className="rounded-card border border-signal-red-border bg-background px-4 min-[480px]:px-5"
         open={redFlagsOpen}
         onToggle={(event) => setRedFlagsOpen(event.currentTarget.open)}

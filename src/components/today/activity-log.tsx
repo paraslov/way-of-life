@@ -36,10 +36,13 @@ export function ActivityLog({
   activities,
   steps,
   showSteps = true,
+  date,
 }: {
   activities: LoggedActivity[];
   steps: number | null;
   showSteps?: boolean;
+  /** A finished day being filled in (D27). */
+  date?: string;
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
@@ -72,7 +75,7 @@ export function ActivityLog({
           id="activity-title"
           className="font-mono text-[11px] tracking-[0.12em] text-muted-foreground uppercase"
         >
-          {t("activity.title")}
+          {t(date ? "activity.titlePast" : "activity.title")}
         </h2>
         <span className="font-mono text-[10px] text-muted-foreground">
           {t("activity.touches")}
@@ -122,6 +125,7 @@ export function ActivityLog({
       )}
 
       <form action={formAction} className="space-y-3">
+        {date ? <input type="hidden" name="date" value={date} /> : null}
         <input type="hidden" name="type" value={type ?? ""} />
         <input type="hidden" name="durationMin" value={minutes ?? ""} />
         <input type="hidden" name="rpe" value={rpe ?? ""} />

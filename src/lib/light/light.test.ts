@@ -183,7 +183,7 @@ describe("verdict", () => {
     expect(result.verdict).toBe("green");
     expect(result.ignoredYellow).toBeNull();
     expect(result.noIntensity).toBe(false);
-    expect(result.rulesVersion).toBe("1.0");
+    expect(result.rulesVersion).toBe("1.1");
   });
 
   it("ignores one yellow among greens but shows it", () => {

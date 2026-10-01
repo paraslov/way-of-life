@@ -7,6 +7,11 @@ import { ACTIVITY_TYPES } from "@/lib/activities";
 import { eveningSchema } from "@/lib/day/evening";
 import { saveEvening } from "@/lib/db/evening";
 import {
+  addLateActivity,
+  saveLateCheckin,
+  saveLateEvening,
+} from "@/lib/db/past-day";
+import {
   addActivity,
   chooseAction,
   removeActivity,
@@ -27,6 +32,14 @@ function textOrNull(value: FormDataEntryValue | null) {
   return typeof value === "string" && value.trim() !== "" ? value : null;
 }
 
+/**
+ * A `date` field targets a finished day inside the edit window (D27);
+ * without it the write goes to today.
+ */
+function pastDate(formData: FormData) {
+  return textOrNull(formData.get("date"));
+}
+
 function done(): ActionState {
   revalidatePath("/", "layout");
   return { status: "saved" };
@@ -34,7 +47,7 @@ function done(): ActionState {
 
 /**
  * Saves the morning check-in, then the light and the decision are recomputed
- * in the same transaction. Symptoms arrive as `symptom.<id>` (severity or ""),
+ * in the same transaction. For a past day only the observations are written. Symptoms arrive as `symptom.<id>` (severity or ""),
  * `symptomRest.<id>` and `symptomHr.<id>` for every id listed in `symptomIds`.
  */
 export async function saveCheckinAction(
@@ -65,6 +78,12 @@ export async function saveCheckinAction(
     })),
   });
   if (!parsed.success) return { status: "invalid" };
+  const date = pastDate(formData);
+  if (date) {
+    return (await saveLateCheckin(date, parsed.data))
+      ? done()
+      : { status: "invalid" };
+  }
   await saveCheckin(parsed.data);
   return done();
 }
@@ -109,6 +128,12 @@ export async function addActivityAction(
     rpe: numberOrNull(formData.get("rpe")),
   });
   if (!parsed.success) return { status: "invalid" };
+  const date = pastDate(formData);
+  if (date) {
+    return (await addLateActivity(date, parsed.data))
+      ? done()
+      : { status: "invalid" };
+  }
   await addActivity(parsed.data);
   return done();
 }
@@ -150,9 +175,16 @@ export async function saveEveningAction(
     fiberBand: textOrNull(formData.get("fiberBand")),
     bedtimeTarget: textOrNull(formData.get("bedtimeTarget")),
     decisionFit: textOrNull(formData.get("decisionFit")),
+    mood: textOrNull(formData.get("mood")),
     note: textOrNull(formData.get("note")),
   });
   if (!parsed.success) return { status: "invalid" };
+  const date = pastDate(formData);
+  if (date) {
+    return (await saveLateEvening(date, parsed.data))
+      ? done()
+      : { status: "invalid" };
+  }
   await saveEvening(parsed.data);
   return done();
 }

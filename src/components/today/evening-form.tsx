@@ -12,6 +12,7 @@ import {
   DECISION_FITS,
   type EveningRow,
   FIBER_BANDS,
+  MOODS,
   PROTEIN_BANDS,
 } from "@/lib/day/evening";
 
@@ -19,10 +20,16 @@ export function EveningForm({
   evening,
   steps,
   chosen,
+  date,
+  showDecisionFit = true,
 }: {
   evening: EveningRow | null;
   steps: number | null;
   chosen: string | null;
+  /** A finished day being filled in (D27). */
+  date?: string;
+  /** Hidden for a day that had no decision to assess. */
+  showDecisionFit?: boolean;
 }) {
   const t = useTranslations("evening");
   const [state, action, pending] = useActionState<ActionState, FormData>(
@@ -37,6 +44,7 @@ export function EveningForm({
     fiberBand: evening?.fiber_band ?? null,
     bedtimeTarget: evening?.bedtime_target ?? null,
     decisionFit: evening?.decision_fit ?? null,
+    mood: evening?.mood ?? null,
     note: evening?.note ?? "",
   });
   useEffect(() => {
@@ -52,6 +60,7 @@ export function EveningForm({
         </span>
       </div>
       <p className="text-[13px] text-muted-foreground">{t("hint")}</p>
+      {date ? <input type="hidden" name="date" value={date} /> : null}
       <input type="hidden" name="steps" value={values.steps ?? ""} />
       <input
         type="hidden"
@@ -74,6 +83,7 @@ export function EveningForm({
         name="decisionFit"
         value={values.decisionFit ?? ""}
       />
+      <input type="hidden" name="mood" value={values.mood ?? ""} />
       <div className="divide-y rounded-input border px-4">
         <FieldRow label={t("steps")} htmlFor="evening-steps">
           <Stepper
@@ -84,6 +94,17 @@ export function EveningForm({
             start={8000}
             step={500}
             onChange={(steps) => setValues((v) => ({ ...v, steps }))}
+          />
+        </FieldRow>
+        <FieldRow label={t("mood")}>
+          <Segmented
+            label={t("mood")}
+            options={MOODS.map((value) => ({
+              value,
+              label: t(`moods.${value}`),
+            }))}
+            value={values.mood}
+            onChange={(mood) => setValues((v) => ({ ...v, mood }))}
           />
         </FieldRow>
         <FieldRow label={t("walkAfterMeal")}>
@@ -136,26 +157,28 @@ export function EveningForm({
             }
           />
         </FieldRow>
-        <FieldRow
-          label={t("decisionFit")}
-          hint={
-            chosen ? (
-              <span className="text-xs text-muted-foreground">{chosen}</span>
-            ) : null
-          }
-        >
-          <Segmented
+        {showDecisionFit ? (
+          <FieldRow
             label={t("decisionFit")}
-            options={DECISION_FITS.map((value) => ({
-              value,
-              label: t(`decisionFits.${value}`),
-            }))}
-            value={values.decisionFit}
-            onChange={(decisionFit) =>
-              setValues((v) => ({ ...v, decisionFit }))
+            hint={
+              chosen ? (
+                <span className="text-xs text-muted-foreground">{chosen}</span>
+              ) : null
             }
-          />
-        </FieldRow>
+          >
+            <Segmented
+              label={t("decisionFit")}
+              options={DECISION_FITS.map((value) => ({
+                value,
+                label: t(`decisionFits.${value}`),
+              }))}
+              value={values.decisionFit}
+              onChange={(decisionFit) =>
+                setValues((v) => ({ ...v, decisionFit }))
+              }
+            />
+          </FieldRow>
+        ) : null}
       </div>
       <label htmlFor="evening-note" className="block text-sm font-medium">
         {t("note")}
@@ -178,7 +201,7 @@ export function EveningForm({
           {t("save")}
         </Button>
         <span className="text-xs text-muted-foreground">
-          {saved ? t("saved") : t("canEdit")}
+          {saved ? t("saved") : date ? null : t("canEdit")}
         </span>
         {state.status === "invalid" ? (
           <span role="alert" className="text-sm text-destructive">

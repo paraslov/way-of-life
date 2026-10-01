@@ -22,14 +22,15 @@ export async function saveEveningFor(
   await client.query(
     `INSERT INTO day_evenings
        (user_id, local_date, walk_after_meal, protein_band, fiber_band,
-        bedtime_target, decision_fit, note)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        bedtime_target, decision_fit, mood, note)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
      ON CONFLICT (user_id, local_date) DO UPDATE SET
        walk_after_meal = EXCLUDED.walk_after_meal,
        protein_band = EXCLUDED.protein_band,
        fiber_band = EXCLUDED.fiber_band,
        bedtime_target = EXCLUDED.bedtime_target,
        decision_fit = EXCLUDED.decision_fit,
+       mood = EXCLUDED.mood,
        note = EXCLUDED.note,
        updated_at = now()`,
     [
@@ -40,6 +41,7 @@ export async function saveEveningFor(
       input.fiberBand,
       input.bedtimeTarget,
       input.decisionFit,
+      input.mood,
       input.note,
     ],
   );
@@ -48,7 +50,7 @@ export async function saveEveningFor(
 export function getEveningFor(client: PoolClient, date: string) {
   return client.query<EveningRow>(
     `SELECT local_date::text AS local_date, walk_after_meal, protein_band,
-            fiber_band, bedtime_target, decision_fit, note
+            fiber_band, bedtime_target, decision_fit, mood, note
        FROM day_evenings WHERE local_date = $1`,
     [date],
   );

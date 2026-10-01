@@ -117,7 +117,7 @@ export const METRICS = {
     domain: "subjective",
     frequency: "daily",
     sources: ["manual"],
-    range: [1, 5],
+    range: [1, 10],
     checkinColumn: "energy",
     baseline: { strategy: "median", windowDays: 14, minPoints: 7 },
   },

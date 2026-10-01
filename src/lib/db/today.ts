@@ -205,18 +205,24 @@ export async function recomputeDecisionFor(
   return decision;
 }
 
-export async function saveCheckinFor(
+/**
+ * Writes the morning observations and symptoms. A late write (a past day,
+ * D27) keeps that morning's red flags, which were for acting then, and marks
+ * the morning as entered after its day ended.
+ */
+async function writeCheckinFor(
   client: PoolClient,
   userId: string,
   date: string,
   input: CheckinInput,
-  settings: Settings,
-): Promise<DayDecision> {
+  late: boolean,
+) {
   await client.query(
     `INSERT INTO daily_checkins
        (user_id, local_date, sleep_minutes, sleep_score, rhr, hrv_ms, hrv_status,
-        energy, desire, legs, red_flags, note)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+        energy, desire, legs, red_flags, note, late_edited_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,
+             CASE WHEN $13::boolean THEN now() END)
      ON CONFLICT (user_id, local_date) DO UPDATE SET
        sleep_minutes = EXCLUDED.sleep_minutes,
        sleep_score = EXCLUDED.sleep_score,
@@ -226,8 +232,11 @@ export async function saveCheckinFor(
        energy = EXCLUDED.energy,
        desire = EXCLUDED.desire,
        legs = EXCLUDED.legs,
-       red_flags = EXCLUDED.red_flags,
+       red_flags = CASE WHEN $13::boolean THEN daily_checkins.red_flags
+                        ELSE EXCLUDED.red_flags END,
        note = EXCLUDED.note,
+       late_edited_at = CASE WHEN $13::boolean THEN now()
+                             ELSE daily_checkins.late_edited_at END,
        updated_at = now()`,
     [
       userId,
@@ -240,8 +249,9 @@ export async function saveCheckinFor(
       input.energy,
       input.desire,
       input.legs,
-      input.redFlags,
+      late ? [] : input.redFlags,
       input.note || null,
+      late,
     ],
   );
 
@@ -272,8 +282,31 @@ export async function saveCheckinFor(
       ],
     );
   }
+}
 
+export async function saveCheckinFor(
+  client: PoolClient,
+  userId: string,
+  date: string,
+  input: CheckinInput,
+  settings: Settings,
+): Promise<DayDecision> {
+  await writeCheckinFor(client, userId, date, input, false);
   return recomputeDecisionFor(client, userId, date, settings);
+}
+
+/**
+ * Fills in or corrects the morning of a finished day. Its decision is never
+ * recomputed or created (D25): the journal shows the current-rules verdict
+ * next to it instead.
+ */
+export async function saveLateCheckinFor(
+  client: PoolClient,
+  userId: string,
+  date: string,
+  input: CheckinInput,
+) {
+  await writeCheckinFor(client, userId, date, input, true);
 }
 
 /** Records the user's answer; `false` when there is no decision for the day. */

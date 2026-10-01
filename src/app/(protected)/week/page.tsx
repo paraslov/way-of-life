@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/page-header";
 import {
@@ -10,6 +11,7 @@ import {
   WeekModeSwitch,
 } from "@/components/week/week-controls";
 import { formatShortDate } from "@/lib/date";
+import { isEditablePastDay } from "@/lib/day/past";
 import { getWeekSummary } from "@/lib/db/week";
 import { getMetric } from "@/lib/metrics/registry";
 import { formatHoursMinutes } from "@/lib/today/checkin";
@@ -52,6 +54,7 @@ export default async function WeekPage() {
   const t = await getTranslations();
   const week = await getWeekSummary();
   const relaxed = week.mode === "travel" || week.mode === "illness";
+  const today = week.days.find((day) => day.isToday)?.date ?? null;
   const number = new Intl.NumberFormat("ru");
   function format(line: TargetLine, value: number) {
     if (line.metricKey === "sleep.duration") return formatHoursMinutes(value);
@@ -168,6 +171,14 @@ export default async function WeekPage() {
                         ? "—"
                         : t("week.noActivity")}
                   </p>
+                  {today && isEditablePastDay(day.date, today) ? (
+                    <Link
+                      href={`/journal?range=7&day=${day.date}&edit=${day.date}`}
+                      className="mt-2 inline-block text-[12px] underline underline-offset-2"
+                    >
+                      {t("week.fillIn")}
+                    </Link>
+                  ) : null}
                 </div>
               </li>
             ))}
@@ -340,7 +351,9 @@ export default async function WeekPage() {
               {
                 label: t("metrics.energy.morning"),
                 value:
-                  week.energyAverage === null ? "—" : `${week.energyAverage}/5`,
+                  week.energyAverage === null
+                    ? "—"
+                    : `${week.energyAverage}/10`,
               },
             ]}
           />
