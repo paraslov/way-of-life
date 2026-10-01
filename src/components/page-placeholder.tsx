@@ -2,8 +2,6 @@ import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/page-header";
 
 export type PlaceholderPage =
-  | "week"
-  | "journal"
   | "strength"
   | "metrics"
   | "horizon"

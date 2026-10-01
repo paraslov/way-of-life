@@ -1,25 +1,35 @@
-import { getTranslations } from "next-intl/server";
-import { PageHeader } from "@/components/page-header";
-import { formatDayTitle, todayId } from "@/lib/date";
-import { resolveTimeZone } from "@/lib/timezone";
+import { TodayExperience } from "@/components/today/today-experience";
+import { getTodayView } from "@/lib/db/today";
+import { getWeekSummary } from "@/lib/db/week";
+import { buildDraft } from "@/lib/today/draft";
 
-export default async function TodayPage() {
-  const t = await getTranslations();
-  const timeZone = await resolveTimeZone();
-
+export default async function TodayPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ phase?: string }>;
+}) {
+  const view = await getTodayView();
+  const week = await getWeekSummary();
+  const query = await searchParams;
+  const hour = Number(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: view.settings.timezone,
+      hour: "2-digit",
+      hourCycle: "h23",
+    }).format(new Date()),
+  );
+  const initialPhase =
+    query.phase === "morning" || query.phase === "evening"
+      ? query.phase
+      : hour < 15
+        ? "morning"
+        : "evening";
   return (
-    <>
-      <PageHeader
-        eyebrow={t("today.dateLine", {
-          date: formatDayTitle(todayId(timeZone)),
-          timeZone,
-        })}
-        title={t("nav.today")}
-        description={t("pages.today")}
-      />
-      <p className="mt-6 max-w-[62ch] rounded-card border border-dashed bg-background px-4 py-3 text-sm text-muted-foreground">
-        {t("pages.comingIn", { stage: "02" })}
-      </p>
-    </>
+    <TodayExperience
+      view={view}
+      draft={buildDraft(view)}
+      week={week}
+      initialPhase={initialPhase}
+    />
   );
 }

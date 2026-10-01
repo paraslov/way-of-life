@@ -1,5 +1,10 @@
 import { z } from "zod";
 import { DEFAULT_TIMEZONE, isTimeZone } from "@/lib/date";
+import {
+  DEFAULT_WEEK_TEMPLATE,
+  PLANNED_SESSIONS,
+  type WeekTemplate,
+} from "@/lib/decision/sessions";
 
 /**
  * Personal physiology and preferences, stored as the jsonb bag on
@@ -13,9 +18,35 @@ const settingsFields = z.object({
   weightKg: z.number().min(30).max(250).nullable(),
   proteinMinG: z.number().int().min(40).max(300),
   proteinMaxG: z.number().int().min(40).max(300),
+  /** RHR baseline until 14 own mornings exist (rules-v1, D14). */
+  rhrStartBaseline: z.number().int().min(30).max(100),
+  weekTemplate: z
+    .array(z.enum(PLANNED_SESSIONS))
+    .length(7)
+    .transform((days) => days as unknown as WeekTemplate),
 });
 
 export const settingsSchema = settingsFields
+  .refine((s) => s.proteinMinG <= s.proteinMaxG, {
+    message: "Protein range is inverted",
+    path: ["proteinMaxG"],
+  })
+  .refine((s) => s.lthr < s.hrMax, {
+    message: "LTHR must be below HRmax",
+    path: ["lthr"],
+  });
+
+/** The fields of the physiology form in settings. */
+export const physiologySchema = settingsFields
+  .pick({
+    timezone: true,
+    lthr: true,
+    hrMax: true,
+    weightKg: true,
+    rhrStartBaseline: true,
+    proteinMinG: true,
+    proteinMaxG: true,
+  })
   .refine((s) => s.proteinMinG <= s.proteinMaxG, {
     message: "Protein range is inverted",
     path: ["proteinMaxG"],
@@ -34,6 +65,8 @@ export const DEFAULT_SETTINGS: Settings = {
   weightKg: null,
   proteinMinG: 120,
   proteinMaxG: 140,
+  rhrStartBaseline: 48,
+  weekTemplate: DEFAULT_WEEK_TEMPLATE,
 };
 
 /**

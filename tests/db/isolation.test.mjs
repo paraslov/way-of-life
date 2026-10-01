@@ -7,6 +7,29 @@ import pg from "pg";
 // user. Add each new table here: the guard test below fails until you do.
 const USER_TABLES = {
   user_settings: "INSERT INTO user_settings (user_id) VALUES ($1)",
+  daily_checkins:
+    "INSERT INTO daily_checkins (user_id, local_date) VALUES ($1, '2026-09-28')",
+  day_evenings:
+    "INSERT INTO day_evenings (user_id, local_date) VALUES ($1, '2026-09-28')",
+  symptom_definitions:
+    "INSERT INTO symptom_definitions (user_id, key, name, scale) VALUES ($1, 'knee', 'Колено', '0_10')",
+  symptom_entries: `WITH d AS (
+      INSERT INTO symptom_definitions (user_id, key, name, scale)
+      VALUES ($1, 'calf', 'Икра', '0_10') RETURNING id)
+    INSERT INTO symptom_entries (user_id, local_date, symptom_id, severity)
+    SELECT $1, '2026-09-28', id, 2 FROM d`,
+  day_decisions: `INSERT INTO day_decisions
+      (user_id, local_date, rule_version, planned_session, recommended_action, snapshot)
+    VALUES ($1, '2026-09-28', '1.0', 'rest', 'rest', '{}')`,
+  activities:
+    "INSERT INTO activities (user_id, local_date, type) VALUES ($1, '2026-09-28', 'walk')",
+  targets: `INSERT INTO targets
+      (user_id, metric_key, period, minimum, target_min, target_max, unit, active_from)
+    VALUES ($1, 'steps.daily', 'day', 7000, 8000, 12000, 'steps', '2026-09-28')`,
+  week_modes:
+    "INSERT INTO week_modes (user_id, week_start) VALUES ($1, '2026-09-28')",
+  weekly_reviews:
+    "INSERT INTO weekly_reviews (user_id, week_start) VALUES ($1, '2026-09-28')",
 };
 
 // Explicit environment only: never load a developer's .env.local here.
@@ -112,6 +135,41 @@ test("runtime grants and transaction-local RLS isolate users", async () => {
     );
   } finally {
     await app.end();
+    try {
+      await admin.query("DELETE FROM users WHERE id = ANY($1::uuid[])", [
+        users,
+      ]);
+    } finally {
+      await admin.end();
+    }
+  }
+});
+
+test("a symptom entry cannot point at another user's definition", async () => {
+  const { admin } = clients();
+  const users = [randomUUID(), randomUUID()];
+  try {
+    await admin.connect();
+    for (const id of users) {
+      await admin.query(
+        "INSERT INTO users (id, email, password_hash) VALUES ($1, $2, 'test-only')",
+        [id, `${id}@example.test`],
+      );
+    }
+    const definition = (
+      await admin.query(
+        "INSERT INTO symptom_definitions (user_id, key, name, scale) VALUES ($1, 'knee', 'Колено', '0_10') RETURNING id",
+        [users[0]],
+      )
+    ).rows[0].id;
+    await assert.rejects(
+      admin.query(
+        "INSERT INTO symptom_entries (user_id, local_date, symptom_id, severity) VALUES ($1, '2026-09-28', $2, 3)",
+        [users[1], definition],
+      ),
+      { code: "23503" },
+    );
+  } finally {
     try {
       await admin.query("DELETE FROM users WHERE id = ANY($1::uuid[])", [
         users,

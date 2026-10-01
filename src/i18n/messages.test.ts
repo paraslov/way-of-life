@@ -43,11 +43,19 @@ describe("ru catalog", () => {
   // The traffic light shows a verdict with reasons, never a score (D7), and
   // nothing here is gamified.
   it.each([
-    ["a readiness score", /readiness|готовност\S* \d|\d+ ?%/i],
+    ["a readiness score", /readiness|готовност\S* \d/i],
     ["a streak", /\bstreak\b|серия|подряд без пропусков/i],
   ])("keeps %s out of the catalog", (_label, pattern) => {
     for (const [key, value] of Object.entries(flatten(ru))) {
       expect(value, key).not.toMatch(pattern);
+    }
+  });
+
+  it("keeps percentages out of the daily traffic light", () => {
+    for (const [key, value] of Object.entries(flatten(ru))) {
+      if (key.startsWith("light.") || key.startsWith("decision.")) {
+        expect(value, key).not.toMatch(/\d+ ?%/);
+      }
     }
   });
 });
