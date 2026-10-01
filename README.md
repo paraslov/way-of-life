@@ -58,6 +58,6 @@ GRANT USAGE ON SCHEMA public TO way_of_life_app;
 
 ## Приватность
 
-Здесь медицинские данные. Правила — [architecture §10](docs/architecture.md#10-приватность-и-безопасность):
+Здесь медицинские данные. Правила — [architecture §10](docs/architecture.md#10-privacy-and-security):
 никаких `console.*` в `src/` (только `src/lib/log.ts` с белым списком полей), никаких
 analytics SDK, значения здоровья не попадают в URL и логи.

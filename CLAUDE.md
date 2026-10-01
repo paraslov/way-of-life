@@ -1,14 +1,24 @@
 # Way of Life
 
-Перед любой работой прочитай [docs/way-of-life-plan.md](docs/way-of-life-plan.md): таблицу статусов этапов,
-раздел «Как работать с планами» и журнал решений. Затем открой план текущего этапа в
-`docs/plans/` и начни с первого неотмеченного шага в чек-листе.
+Before any work, read [docs/way-of-life-plan.md](docs/way-of-life-plan.md): the stage status
+table, "Working with plans" and the decision log. Then open the current stage plan in
+`docs/plans/` and start from the first unchecked step of its checklist.
 
-- Сквозные концепции: [docs/architecture.md](docs/architecture.md).
-- Закончил шаг — отметь `[x]` в плане в том же коммите (`WOL-<этап>.<шаг> (feat): …`).
-- Разошёлся с планом — поправь план и добавь строку в его журнал изменений.
-- Инфраструктура и компоненты взяты из `../ACT`.
-- Не логировать данные о здоровье (architecture §10).
+- Cross-cutting concepts: [docs/architecture.md](docs/architecture.md).
+- Step done → check it `[x]` in the plan in the same commit (`WOL-<stage>.<step> (feat): …`).
+- Diverged from the plan → fix the plan and add a row to its change log.
+- Infrastructure and components come from `../ACT`.
+- Never log health data (architecture §10).
+
+## Language
+
+- Write docs (`docs/`, `CLAUDE.md`), code comments and commit messages in English.
+- The UI is Russian only (`src/i18n/messages/ru.json`, D3). Quote literal UI strings in
+  Russian, e.g. «Отдых», «Дописать день».
+- Talk to the user in English.
+- Translation is gradual (D28): the core docs are English; any other Russian doc is
+  translated when it is next substantively revised — first a translation-only commit,
+  then the content change. Until then a Russian doc stays valid as is.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

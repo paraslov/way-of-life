@@ -1,76 +1,78 @@
-# Defaults: настройки, стартовые данные, targets
+# Defaults: settings, starting data, targets
 
-Источник чисел для этапа 02 и seed-данных. Правила светофора лежат в [rules-v1.md](./rules-v1.md).
-Обновлён: 28.09.2026
+The source of numbers for stage 02 and seed data. Traffic-light rules are in [rules-v1.md](./rules-v1.md).
+Updated: 28.09.2026
 
-## Настройки пользователя (`user_settings`)
+## User settings (`user_settings`)
 
-| Параметр | Значение | Источник |
+| Setting | Value | Source |
 |---|---|---|
-| Часовой пояс | `Asia/Almaty` | — |
-| LTHR | **165** | пользователь, 28.09.2026; уточнить тестом 21.10 (`method: test_30min`) |
-| HRmax | 184 | по часам |
-| Вес | ~85–88 кг | уточнить взвешиванием |
-| Белок | 120–140 г/сут (1,4–1,6 г/кг) | план v6 |
+| Time zone | `Asia/Almaty` | — |
+| LTHR | **165** | user, 28.09.2026; refine with the 21.10 test (`method: test_30min`) |
+| HRmax | 184 | from the watch |
+| Weight | ~85–88 kg | confirm by weighing |
+| Protein | 120–140 g/day (1.4–1.6 g/kg) | plan v6 |
 
-### Пульсовые зоны от LTHR 165
+### Heart-rate zones from LTHR 165
 
-Границы пересчитаны пропорционально зонам v5, где LTHR был 162.
+Boundaries scaled proportionally from the v5 zones, where LTHR was 162.
 
-| Зона | Пульс | Где используем |
+| Zone | Heart rate | Used for |
 |---|---|---|
-| Z1 восстановление | < 140 | заминка, день после трекинга |
-| Z2 аэробная база | 140–151 | лёгкий бег (**потолок 151**), трекинг |
-| Z3 темп | 152–157 | темповый финиш |
-| Z4 порог | 158–165 | пороговые отрезки, фартлек |
-| Z5 выше порога | > 165 | 4×4 (к концу отрезка > 165) |
+| Z1 recovery | < 140 | cool-down, the day after trekking |
+| Z2 aerobic base | 140–151 | easy run (**cap 151**), trekking |
+| Z3 tempo | 152–157 | tempo finish |
+| Z4 threshold | 158–165 | threshold segments, fartlek |
+| Z5 above threshold | > 165 | 4×4 (> 165 by the end of a segment) |
 
-Lite-силовая: пульс < 130 (без изменений). Забег 27.09 со средним пульсом 148 — это 90 % от LTHR 165.
-Проверить, что в Garmin выставлен LTHR 165 и зоны там совпадают с этой таблицей.
+Lite strength: heart rate < 130 (unchanged). The 27.09 race with an average of 148 is 90 % of
+LTHR 165. Check that Garmin has LTHR 165 set and that its zones match this table.
 
-## Стартовые данные Garmin (01–28.09.2026)
+## Starting Garmin data (01–28.09.2026)
 
-Нужны, чтобы светофор работал с первого дня, пока своя история baseline не набралась.
+Needed so the traffic light works from day one, before an own baseline history builds up.
 
-| Показатель | Значение | Комментарий |
+| Metric | Value | Comment |
 |---|---|---|
-| Сон, среднее | **6 ч 55 мин** | чуть ниже минимума 7 ч |
-| Потребность во сне (Garmin) | 7 ч 02 мин | |
-| Sleep Score, среднее | 84 | |
-| Ночи < 6 ч | ~4 из 28 | 5:12 – 5:55 |
-| Ночи 6–7 ч | ~13 из 28 | |
-| Ночи ≥ 7 ч | ~11 из 28 | вторая половина месяца заметно лучше |
-| RHR, среднее | **48** | диапазон ~44–50 |
-| Ночной пульс, среднее | 52 | |
-| Body Battery за ночь | +62 | |
-| SpO₂ / дыхание / температура кожи | 97 % / 15 в мин / 0° | кандидаты в сигналы болезни при импорте (09) |
-| HRV | **нет данных** | открытый вопрос |
-| Отбой и подъём | **нет данных** | не обязательно для старта |
-| Шаги в рабочий день | 8 000–12 000 | цель по шагам уже выполняется |
+| Sleep, average | **6 h 55 min** | just under the 7 h minimum |
+| Sleep need (Garmin) | 7 h 02 min | |
+| Sleep Score, average | 84 | |
+| Nights < 6 h | ~4 of 28 | 5:12 – 5:55 |
+| Nights 6–7 h | ~13 of 28 | |
+| Nights ≥ 7 h | ~11 of 28 | the second half of the month is noticeably better |
+| RHR, average | **48** | range ~44–50 |
+| Night-time heart rate, average | 52 | |
+| Body Battery overnight | +62 | |
+| SpO₂ / respiration / skin temperature | 97 % / 15 per min / 0° | candidate illness signals on import (09) |
+| HRV | **no data** | open question |
+| Bedtime and wake time | **no data** | not needed to start |
+| Steps on a work day | 8,000–12,000 | the step target is already met |
 
-## Targets (seed таблицы `targets`)
+## Targets (seed for the `targets` table)
 
 | metric_key | period | minimum | target_min | target_max | unit |
 |---|---|---|---|---|---|
 | `aerobic.minutes` | week | 150 | 250 | 400 | min |
-| `intensity.sessions` | 10 дней | 0 | 1 | 1 | шт |
-| `strength.sessions` | week | 1 (+1 Lite) | 2 | 2 (зимой 3) | шт |
-| `power_balance.sessions` | week | 2 | 2 | 2 | шт (5 / 8–10 мин) |
-| `mobility.sessions` | week | 3 | 3 | 6 | шт |
-| `steps.daily` | day | 7 000 | 8 000 | 12 000 | шаги |
-| `sleep.duration` | day, среднее за неделю | 420 | 450 | 480 | min |
+| `intensity.sessions` | 10 days | 0 | 1 | 1 | sessions |
+| `strength.sessions` | week | 1 (+1 Lite) | 2 | 2 (3 in winter) | sessions |
+| `power_balance.sessions` | week | 2 | 2 | 2 | sessions (5 / 8–10 min) |
+| `mobility.sessions` | week | 3 | 3 | 6 | sessions |
+| `steps.daily` | day | 7,000 | 8,000 | 12,000 | steps |
+| `sleep.duration` | day, weekly average | 420 | 450 | 480 | min |
 | `protein.daily` | day | 105 | 120 | 140 | g |
 | `fiber.daily` | day | 20 | 25 | 35 | g |
-| `rest.days` | week | 1 | 1 | 1 | дни |
+| `rest.days` | week | 1 | 1 | 1 | days |
 
-## Симптомы (seed `symptom_definitions`)
+## Symptoms (seed for `symptom_definitions`)
 
-| key | Название | Шкала | Закреплён |
+`name` is the Russian UI label.
+
+| key | Name | Scale | Pinned |
 |---|---|---|---|
-| `knee` | Колено | 0–10 | да |
-| `thigh` | Бедро (rectus femoris) | 0–10 | да |
-| `palpitations` | Перебои | да/нет | да |
-| `illness` | Признаки болезни | да/нет | да |
-| `reflux` | Рефлюкс | 0–10 | нет |
-| `abdomen` | Живот | 0–10 | нет |
-| `calf` | Икра | 0–10 | нет |
+| `knee` | Колено (knee) | 0–10 | yes |
+| `thigh` | Бедро (rectus femoris) | 0–10 | yes |
+| `palpitations` | Перебои (palpitations) | yes/no | yes |
+| `illness` | Признаки болезни (signs of illness) | yes/no | yes |
+| `reflux` | Рефлюкс (reflux) | 0–10 | no |
+| `abdomen` | Живот (abdomen) | 0–10 | no |
+| `calf` | Икра (calf) | 0–10 | no |

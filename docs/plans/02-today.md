@@ -65,7 +65,7 @@ targets          id, user_id, metric_key, period(day|week), minimum, target_min,
 
 ### 02.5 — Светофор
 
-По [rules-v1.md](../content/rules-v1.md) и [architecture §6](../architecture.md#6-светофор). Тесты
+По [rules-v1.md](../content/rules-v1.md) и [architecture §6](../architecture.md#6-traffic-light). Тесты
 на каждое правило, включая «один жёлтый игнорируем», «всё UNKNOWN», «стартовые пороги
 без baseline».
 

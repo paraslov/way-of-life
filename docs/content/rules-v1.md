@@ -1,108 +1,111 @@
-# Правила светофора v1
+# Traffic-light rules v1
 
-`RULES_VERSION = "1.1"`. Реализация: `src/lib/light/` (этап 02). Общие принципы описаны в
-[architecture §5–6](../architecture.md#5-baseline-engine). Числа взяты из [defaults.md](./defaults.md).
-Обновлён: 30.09.2026
+`RULES_VERSION = "1.1"`. Implementation: `src/lib/light/` (stage 02). General principles are in
+[architecture §5–6](../architecture.md#5-baseline-engine). Numbers come from [defaults.md](./defaults.md).
+Updated: 30.09.2026
 
 ## Baseline
 
-| Показатель | Стратегия | Стартовое значение, пока n < 14 |
+| Metric | Strategy | Starting value while n < 14 |
 |---|---|---|
-| RHR | медиана за 28 дней без сегодня | 48 |
-| Сон | среднее за 7 и за 30 дней | 6:55 (для KPI, не для сигнала) |
-| HRV | статус Garmin | — |
+| RHR | median over 28 days, excluding today | 48 |
+| Sleep | mean over 7 and over 30 days | 6:55 (for the KPI, not for the signal) |
+| HRV | Garmin status | — |
 
-## Сигналы
+## Signals
 
-Если значение не введено, сигнал `UNKNOWN`.
+A value that is not entered gives an `UNKNOWN` signal.
 
-| Сигнал | Зелёный | Жёлтый | Красный |
+| Signal | Green | Yellow | Red |
 |---|---|---|---|
-| **Сон** (эта ночь) | ≥ 7:00 | 6:00–6:59 | < 6:00 |
-| **RHR** (от baseline B) | ≤ B + 3 | B + 4…6, или ≥ B + 7 один день | ≥ B + 7 два дня подряд |
-| **HRV** (статус Garmin) | Balanced | Unbalanced / Low 1–2 дня | Low 3+ дня или Poor |
-| **Желание двигаться** | хочется выйти | нейтрально, вяло | даже вставать не хочется |
-| **Ноги** | лёгкие | тяжёлые | тяжёлые 3+ дня подряд |
-| **Колено / бедро** | 0–1 | 2–3 | ≥ 4 или боль в покое |
-| **Перебои** (за сутки) | нет | да (в покое) | — (см. красные флаги) |
-| **Признаки болезни** | нет | — | да |
+| **Sleep** (last night) | ≥ 7:00 | 6:00–6:59 | < 6:00 |
+| **RHR** (from baseline B) | ≤ B + 3 | B + 4…6, or ≥ B + 7 for one day | ≥ B + 7 two days in a row |
+| **HRV** (Garmin status) | Balanced | Unbalanced / Low 1–2 days | Low 3+ days or Poor |
+| **Desire to move** | want to go out | neutral, sluggish | don't even want to get up |
+| **Legs** | light | heavy | heavy 3+ days in a row |
+| **Knee / thigh** | 0–1 | 2–3 | ≥ 4 or pain at rest |
+| **Palpitations** (over the day) | no | yes (at rest) | — (see red flags) |
+| **Signs of illness** | no | — | yes |
 
-При стартовом B = 48 пороги RHR такие: ≤ 51 зелёный · 52–54 жёлтый · ≥ 55 два дня подряд красный.
+With the starting B = 48 the RHR thresholds are: ≤ 51 green · 52–54 yellow · ≥ 55 two days in a row red.
 
-**Энергия (1–10)**, как и RPE, показывается, но в итог не входит. Решение пересмотрим после гейта.
-С версии 1.1 шкала 1–10 (D26); ответы 1–5 пересчитаны ×2, снимки решений версии 1.0 хранят старую шкалу.
+**Energy (1–10)**, like RPE, is shown but not part of the verdict. Revisit after the gate.
+Since version 1.1 the scale is 1–10 (D26); 1–5 answers were multiplied by 2, and decision
+snapshots of version 1.0 keep the old scale.
 
-### Уточнения при реализации (02.5)
+### Implementation notes (02.5)
 
-- **Шкалы 1–3.** Желание: 3 — хочется выйти, 2 — нейтрально, 1 — даже вставать не хочется.
-  Ноги: 3 — лёгкие, 2 — тяжёлые, 1 — забитые; «тяжёлые» = 1 или 2.
-- **«Подряд»** — календарные дни без пропуска: если вчера нет данных, серия прерывается.
-- **Боль в покое** — отметка «в покое» при силе ≥ 2 (0–1 и так зелёные).
-- **Колено и бедро** — два отдельных сигнала.
-- **RHR от личного baseline:** медиана может быть дробной (48,5), граница ≤ B + 3 сравнивается как есть.
-- Не введённый показатель или симптом — `UNKNOWN`; невыбранный да/нет-симптом в сохранённой форме — «нет».
+- **1–3 scales.** Desire: 3 — want to go out, 2 — neutral, 1 — don't even want to get up.
+  Legs: 3 — light, 2 — heavy, 1 — loaded; "heavy" = 1 or 2.
+- **"In a row"** means consecutive calendar days: if yesterday has no data, the streak breaks.
+- **Pain at rest** — the "at rest" mark with severity ≥ 2 (0–1 is green anyway).
+- **Knee and thigh** are two separate signals.
+- **RHR from the personal baseline:** the median may be fractional (48.5); the ≤ B + 3 boundary
+  is compared as is.
+- A metric or symptom not entered is `UNKNOWN`; an unselected yes/no symptom in a saved form is "no".
 
-## Итог
+## Verdict
 
-1. Красный флаг перекрывает всё (см. ниже).
-2. Итог — худший из известных сигналов.
-3. Один жёлтый при всех остальных зелёных → итог зелёный, но с пометкой «учтено: …».
-   Нужен хотя бы один известный зелёный: единственный известный сигнал, и он жёлтый, → итог жёлтый.
-4. Все сигналы `UNKNOWN` → итог `UNKNOWN`, действует план по умолчанию.
+1. A red flag overrides everything (see below).
+2. The verdict is the worst known signal.
+3. One yellow with all other signals green → green verdict, with the note «учтено: …».
+   At least one known green is required: if the only known signal is yellow, the verdict is yellow.
+4. All signals `UNKNOWN` → verdict `UNKNOWN`, the default plan applies.
 
-## Действие
+## Action
 
-| Итог | Интенсивная | Силовая A/B | Лёгкий бег / трекинг |
+| Verdict | Intensity | Strength A/B | Easy run / trekking |
 |---|---|---|---|
-| Зелёный | по плану | по плану | по плану |
-| Жёлтый | → лёгкий бег 30–40 мин, пульс < 151 | → Lite | короче, пульс < 151 |
-| Красный | отдых или прогулка | отдых или прогулка | отдых или прогулка |
-| UNKNOWN | по плану, если самочувствие нормальное | по плану | по плану |
+| Green | as planned | as planned | as planned |
+| Yellow | → easy run 30–40 min, heart rate < 151 | → Lite | shorter, heart rate < 151 |
+| Red | rest or a walk | rest or a walk | rest or a walk |
+| UNKNOWN | as planned if feeling normal | as planned | as planned |
 
-Перебои за сутки дают отдельное ограничение: **сегодня без интенсивной**, даже если итог зелёный.
+Palpitations during the day add a separate restriction: **no intensity today**, even with a
+green verdict.
 
-## Режимы и протоколы возвращения
+## Modes and return protocols
 
-Черновик по [architecture §8](../architecture.md#8-конфигурация-вместо-хардкода); реализация — 05.2
-после гейта. Это личные настройки по умолчанию, а не медицинские правила: рекомендации врача важнее.
+Draft per [architecture §8](../architecture.md#8-configuration-over-hardcoding); implemented in
+05.2 after the gate. These are personal defaults, not medical rules: a doctor's advice comes first.
 
-| Режим | Во время | Возвращение |
+| Mode | During | Return |
 |---|---|---|
-| Болезнь с температурой | без тренировок, только быт и прогулка по самочувствию | 2–3 дня только ходьба → Lite-силовая и лёгкий бег → интенсивная не раньше 7 дней после температуры |
-| Болезнь без температуры | ходьба и Lite по самочувствию, без интенсивной | обычный план, интенсивная после 2 дней без симптомов |
-| Поездка | minimum: ходьба + одна короткая силовая с весом тела | обычный план со следующего дня |
-| Обострение ЖКТ (рефлюкс, поджелудочная) | без интенсивной; адаптировать питание и тайминг еды | нагрузка возвращается, когда симптомы стихли |
-| Травма / колено | замены без ударной нагрузки и прыжков; силовая для остального тела сохраняется | ударная нагрузка — при боли 0–1 и без боли в покое |
+| Illness with fever | no training, only daily life and a walk as feels right | 2–3 days walking only → Lite strength and easy runs → intensity no earlier than 7 days after the fever |
+| Illness without fever | walking and Lite as feels right, no intensity | normal plan, intensity after 2 symptom-free days |
+| Travel | minimum: walking + one short bodyweight strength session | normal plan from the next day |
+| GI flare-up (reflux, pancreas) | no intensity; adapt food and meal timing | load returns once symptoms settle |
+| Injury / knee | swaps without impact or jumps; strength for the rest of the body continues | impact load once pain is 0–1 and there is no pain at rest |
 
-Во время режима недобор targets нейтрален, quality не предлагается. Протокол возвращения
-показывается в решении дня как причина: «после болезни: день 2 из 3 — только ходьба».
+During a mode, missed targets are neutral and quality is not offered. The return protocol is
+shown in the day decision as the reason, e.g. «после болезни: день 2 из 3 — только ходьба».
 
-## Красные флаги (вне светофора)
+## Red flags (outside the traffic light)
 
-Остановиться и обратиться к врачу, если:
+Stop and see a doctor if:
 
-- перебои во время нагрузки не проходят на шаге;
-- боль или давление в груди;
-- предобморок;
-- одышка несоразмерно нагрузке.
+- palpitations during exercise don't pass when walking;
+- chest pain or pressure;
+- presyncope;
+- breathlessness out of proportion to effort.
 
-## Шаблон недели по умолчанию
+## Default week template
 
-Пн — силовая A + мощность · Вт — лёгкий бег + strides · Ср — интенсивная (если прошло ≥ 7 дней
-с прошлой, иначе лёгкий бег) · Чт — силовая B + мощность · Пт — активный отдых ·
-Сб — трекинг · Вс — отдых.
+Mon — strength A + power · Tue — easy run + strides · Wed — intensity (if ≥ 7 days since the
+last one, otherwise an easy run) · Thu — strength B + power · Fri — active rest ·
+Sat — trekking · Sun — rest.
 
-## Проверить на гейте
+## Check at the gate
 
-- **Доля жёлтых ночей.** В сентябре ~13 из 28 ночей были 6–7 ч. С порогом 7:00 сон будет
-  жёлтым почти через день. Возможные варианты: оставить как есть (сон — KPI №1, пусть
-  напоминает); ориентироваться на «потребность во сне» Garmin; считать жёлтым только
-  < 6:30 или две ночи < 7:00 подряд.
-- Не слишком ли жёсткий порог RHR + 4 при индивидуальном разбросе 44–50.
+- **Share of yellow nights.** In September ~13 of 28 nights were 6–7 h. With a 7:00 threshold
+  sleep will be yellow almost every other day. Options: keep it (sleep is KPI #1, let it
+  remind); use Garmin's "sleep need"; count as yellow only < 6:30 or two
+  nights < 7:00 in a row.
+- Is the RHR + 4 threshold too strict given an individual range of 44–50?
 
-## Журнал изменений
+## Change log
 
-| Дата | Версия | Что |
+| Date | Version | What |
 |---|---|---|
-| 28.09.2026 | 1.0 | Правила v1 |
-| 30.09.2026 | 1.1 | Энергия 1–10 вместо 1–5 (D26), в вердикт по-прежнему не входит. Добавлен черновик режимов и протоколов возвращения |
+| 28.09.2026 | 1.0 | Rules v1 |
+| 30.09.2026 | 1.1 | Energy 1–10 instead of 1–5 (D26), still not part of the verdict. Added a draft of modes and return protocols |
