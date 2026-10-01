@@ -1,88 +1,88 @@
-# NN — Название этапа
+# NN — Stage name
 
-**Версия:** V0.N · **Статус:** ⬜ · **Зависит от:** … · **Обновлён:** ДД.ММ.ГГГГ
-Мастер-план: [way-of-life-plan.md](../way-of-life-plan.md) · Архитектура: [architecture.md](../architecture.md) · Модель: [философия v1](../way-of-life-plan.md#модель-философия-v1)
+**Version:** V0.N · **Status:** ⬜ · **Depends on:** … · **Updated:** DD.MM.YYYY
+Master plan: [way-of-life-plan.md](../way-of-life-plan.md) · Architecture: [architecture.md](../architecture.md) · Model: [philosophy v1](../way-of-life-plan.md#model-philosophy-v1)
 
-> Этап после гейта → перед стартом сверить план с [итогами использования 02](./02-today.md#итоги-использования).
+> A stage after the gate → before starting, check the plan against the [02 usage results](./02-today.md#итоги-использования).
 
-## Чек-лист
+## Checklist
 
-> Отмечать `[x]` в том же коммите, что и шаг. Коммит: `WOL-NN.K (feat): …`.
-> Частично сделано → не отмечать, дописать `↳ осталось: …`.
+> Check `[x]` in the same commit as the step. Commit: `WOL-NN.K (feat): …`.
+> Partly done → don't check it, add `↳ left: …`.
 
 - [ ] **NN.1** — …
 - [ ] **NN.2** — …
-- [ ] **NN.V** — Проверка (см. ниже)
+- [ ] **NN.V** — Verification (see below)
 
 ---
 
-## Цель
+## Goal
 
-Одна-две фразы: что пользователь сможет **решить или сделать** после этапа.
+One or two sentences: what the user can **decide or do** after this stage.
 
-**Критерий готовности:** проверяемое утверждение. Без причинных формулировок («как X влияет
-на Y»), если этап не делает причинный анализ.
+**Done when:** a verifiable statement. No causal wording ("how X affects Y") unless the stage
+does causal analysis.
 
-## Связь с моделью
+## Link to the model
 
-Заполнить до шагов. Если этап не меняет ни одного решения, скоуп стоит пересмотреть.
+Fill in before the steps. If the stage changes no decision, reconsider its scope.
 
-- **Ось:** Capacity / Vitality / Risk — что этап помогает видеть или менять.
-- **Решение и горизонт:** какое решение меняет — дня, недели/квартала или десятилетия/80.
-- **Функция в 80:** какая функция Горизонта за этим стоит (если есть).
-- **Соблазны:** что из [«Не строим»](../way-of-life-plan.md#не-строим) сюда просится и почему не делаем.
+- **Axis:** Capacity / Vitality / Risk — what the stage helps see or change.
+- **Decision and horizon:** which decision it changes — day, week/quarter, or decade/80.
+- **Function at 80:** which Horizon function stands behind it (if any).
+- **Temptations:** what from ["Not building"](../way-of-life-plan.md#not-building) tempts here and why we don't do it.
 
-## Скоуп
+## Scope
 
-**Входит:** …
-**Не входит:** … (куда уходит — этап / бэклог)
+**In:** …
+**Out:** … (where it goes — stage / backlog)
 
-## Данные
+## Data
 
-Заполнить, если этап добавляет или читает наблюдения. Ссылаться на
-[architecture.md](../architecture.md), а не пересказывать его.
+Fill in if the stage adds or reads observations. Reference [architecture.md](../architecture.md)
+rather than restating it.
 
-- **Каноническое хранение:** где живёт каждое новое наблюдение; не появляется ли вторая серия того же.
-- **Источник и точка сравнения:** `source`/`method`; личный baseline или клинический ориентир (D23).
-- **Пусто ≠ 0 ≠ отдых:** как показывается отсутствие данных.
-- **Режимы недели:** как этап ведёт себя в болезнь, поездку, обострение, травму.
-- **История:** какие настройки и правила действуют на дату (`active_from`, `snapshot`);
-  что не пересчитывается задним числом.
+- **Canonical storage:** where each new observation lives; no second series of the same thing.
+- **Source and reference point:** `source`/`method`; personal baseline or clinical reference (D23).
+- **Empty ≠ 0 ≠ rest:** how missing data is shown.
+- **Week modes:** how the stage behaves during illness, travel, a flare-up, an injury.
+- **History:** which settings and rules apply by date (`active_from`, `snapshot`); what is not
+  recomputed after the fact.
 
-## Шаги
+## Steps
 
 ### NN.1 — …
 
-Что сделать, файлы, таблицы, функции, тесты.
+What to do: files, tables, functions, tests.
 
-## Проверка
+## Verification
 
-- [ ] `pnpm check` зелёный
-- [ ] Ручной сценарий: …
-- [ ] Пустые данные, первый месяц и режим болезни/поездки не выглядят как провал
-- [ ] Светлая и тёмная тема, 375 px
+- [ ] `pnpm check` green
+- [ ] Manual scenario: …
+- [ ] Empty data, the first month and an illness/travel mode don't look like failure
+- [ ] Light and dark theme, 375 px
 
-## Запрос в Claude Design
+## Claude Design request
 
-**Когда отправлять:** …
+**When to send:** …
 
-Текст запроса (request **to** design, не handoff **from** design):
+Request text (a request **to** design, not a handoff **from** design):
 
-- Что нужно и зачем
-- Иерархия источников: план → архитектура → реализованные экраны → хэндофф → токены
-- Неотменяемые ограничения: по умолчанию — без score и процентов готовности; `UNKNOWN` —
-  нейтральное состояние; нет данных ≠ ноль; цвет не единственный канал; рекомендация —
-  предложение; без стриков и геймификации. Плюс ограничения этапа.
-- Поверхности и состояния для отрисовки
+- What is needed and why
+- Source hierarchy: plan → architecture → implemented screens → handoff → tokens
+- Non-negotiable constraints: by default — no score or readiness percentages; `UNKNOWN` is a
+  neutral state; no data ≠ zero; colour is never the only channel; a recommendation is a
+  suggestion; no streaks or gamification. Plus the stage's own constraints.
+- Surfaces and states to draw
 
-Перед отправкой сверить запрос с итогами использования 02 и фактическим состоянием экранов.
+Before sending, check the request against the 02 usage results and the actual state of the screens.
 
-## Открытые вопросы
+## Open questions
 
 - [ ] …
 
-## Журнал изменений
+## Change log
 
-| Дата | Что | Почему |
+| Date | What | Why |
 |---|---|---|
-| ДД.ММ.ГГГГ | План создан | — |
+| DD.MM.YYYY | Plan created | — |

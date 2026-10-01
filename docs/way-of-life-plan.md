@@ -1,234 +1,241 @@
-# Way of Life — мастер-план
+# Way of Life — master plan
 
-Личная система сохранения healthspan — «операционная система образа жизни 40 → 80». Не
-фитнес-трекер, не медицинская карта и не читалка плана, а **инструмент ежедневного решения**:
-утром за ≤ 60 с понять, добавляет эта неделя энергии или съедает её, и что разумно делать
-сегодня. Иногда лучшее действие дня — не тренировка, а сон, прогулка или ничего не добавлять.
+A personal healthspan system — an "operating system for a 40 → 80 way of life". Not a fitness
+tracker, not a medical record and not a plan reader, but a **daily decision tool**: in ≤ 60 s
+each morning, see whether this week adds energy or drains it, and what is sensible to do
+today. Sometimes the best action of the day is not a workout but sleep, a walk, or adding
+nothing at all.
 
-Главная цель — **функция сейчас и в 80 лет**: 4 этажа, поднять 15 кг, встать с пола,
-неровная тропа, ясная голова, свои люди. Garmin, анализы и тесты — датчики приборной панели,
-а не сама цель.
+The main goal is **function now and at 80**: 4 flights of stairs, lift 15 kg, get up from the
+floor, an uneven trail, a clear head, my people. Garmin, lab tests and fitness tests are
+dashboard sensors, not the goal itself.
 
-Последнее обновление: 30.09.2026
+Last updated: 01.10.2026
 
 ---
 
-## Модель (философия v1)
+## Model (philosophy v1)
 
-Полная версия с обоснованием — [concept-plan.md](./concept-plan.md), заморожена 30.09.2026 (D22).
-Пересматриваем только по данным использования. Сверка документов с ней —
+Full version with reasoning: [concept-plan.md](./concept-plan.md), frozen on 30.09.2026 (D22).
+Revised only from real-usage data. How the docs line up with it:
 [concept-review-status.md](./concept-review-status.md).
 
 ```text
-Главная цель: функция сейчас и в 80
-  → Три оси: что наблюдаем — Capacity / Vitality / Risk
-    → Главный ограничитель: что делаем сейчас (1 build focus + ≤ 1 protect item)
-      → minimum / target / optional: сколько делаем
+Main goal: function now and at 80
+  → Three axes: what we observe — Capacity / Vitality / Risk
+    → Main bottleneck: what we do now (1 build focus + ≤ 1 protect item)
+      → minimum / target / optional: how much we do
 ```
 
-- **Capacity** — что я могу: VO₂max, сила, мощность, баланс, mobility, когнитивный резерв.
-- **Vitality** — как мне живётся сейчас: сон, энергия, восстановление, текущие симптомы.
-- **Risk** — что может отнять резерв: давление, ApoB, HbA1c, талия, стеатоз, травмы, зрение и слух.
+- **Capacity** — what I can do: VO₂max, strength, power, balance, mobility, cognitive reserve.
+- **Vitality** — how life feels right now: sleep, energy, recovery, current symptoms.
+- **Risk** — what can take the reserve away: blood pressure, ApoB, HbA1c, waist, steatosis,
+  injuries, vision and hearing.
 
-У каждой метрики одна основная ось: текущий симптом → Vitality, структурный или долгосрочный
-процесс → Risk. Build/Protect, три горизонта и stress budget — линзы внутри модели, а не
-отдельные модели.
+Every metric has one primary axis: a current symptom → Vitality, a structural or long-term
+process → Risk. Build/Protect, the three horizons and the stress budget are lenses inside the
+model, not separate models.
 
-### Принципы
+### Principles
 
-1. **Function > Metrics.** Метрики — приборы, функция — цель.
-2. **Capacity + Vitality + Risk.** Резерв строим (поднимаем потолок) и защищаем (замедляем спад, не опускаемся ниже порога независимости).
-3. **Leverage first.** Главный ограничитель — рычаг с наибольшей отдачей, а не худшая метрика; меняется не чаще раза в месяц.
-4. **minimum / target / optional.** Программа переживает плохие недели; больше — не значит лучше.
-5. **Жизнь ломает недели.** У болезни, поездки, обострения и травмы есть протокол возвращения.
-6. **Health should enable life.** Измеряем только то, что меняет решение хотя бы на одном горизонте: день · десятилетие · 80.
-7. **Signal ≠ diagnosis, day ≠ trend.** Нет данных — `UNKNOWN`, а не «плохо».
-8. **Правильная точка сравнения.** Носимые сигналы — с личной базой; маркеры риска — с клиническими ориентирами и своим трендом (D23).
-9. **Одно наблюдение — одно каноническое хранение и одна основная ось.**
-10. **Рекомендация — предложение.** Выбор за пользователем.
+1. **Function > Metrics.** Metrics are instruments, function is the goal.
+2. **Capacity + Vitality + Risk.** The reserve is built (raise the ceiling) and protected (slow the decline, stay above the independence threshold).
+3. **Leverage first.** The main bottleneck is the lever with the biggest return, not the worst metric; it changes at most once a month.
+4. **minimum / target / optional.** The program survives bad weeks; more is not automatically better.
+5. **Life breaks weeks.** Illness, travel, flare-ups and injuries each have a return protocol.
+6. **Health should enable life.** Measure only what changes a decision on at least one horizon: day · decade · 80.
+7. **Signal ≠ diagnosis, day ≠ trend.** No data is `UNKNOWN`, not "bad".
+8. **The right reference point.** Wearable signals against the personal baseline; risk markers against clinical references and one's own trend (D23).
+9. **One observation — one canonical store and one primary axis.**
+10. **A recommendation is a suggestion.** The user decides.
 
-### Не строим
+### Not building
 
-Без сильной причины: health/readiness score, биологический возраст, вероятность долголетия,
-десятки ежедневных метрик, AI-доктора и навязчивого AI-коуча, EAV и универсальную онтологию,
-correlation engine на нескольких неделях данных, social/happiness score, автоматическое
-увеличение объёма, ACT внутри Way of Life.
+Without a strong reason: a health/readiness score, biological age, longevity probability,
+dozens of daily metrics, an AI doctor or an intrusive AI coach, EAV or a universal ontology,
+a correlation engine on a few weeks of data, social/happiness scores, automatic volume
+increases, ACT inside Way of Life.
 
 ---
 
-## Статус этапов
+## Stage status
 
-> Истина о прогрессе — чек-листы в планах этапов. Эта таблица — их сводка, обновляется
-> при смене статуса этапа.
-> ⬜ не начат · 🟡 в работе · ✅ готов · ⏸ отложен · 🚧 ждёт гейта
+> The truth about progress is the checklists in the stage plans. This table summarises them
+> and is updated when a stage changes status.
+> ⬜ not started · 🟡 in progress · ✅ done · ⏸ postponed · 🚧 waiting for the gate
 
-| # | Этап | Версия | План | Статус | Зависит от |
+| # | Stage | Version | Plan | Status | Depends on |
 |---|---|---|---|---|---|
-| 00 | Контент v6: концепции и defaults | V0 | [00-content-v6](./plans/00-content-v6.md) | 🟡 | — |
-| 01 | Каркас из ACT + приватность | V0.1 | [01-infrastructure](./plans/01-infrastructure.md) | ✅ | — |
-| 02 | **Сегодня: чек-ин → светофор → решение + простая неделя** | V0.2 | [02-today](./plans/02-today.md) | 🟡 | 00 (defaults), 01 |
-| — | **Гейт: 2–3 недели собственного использования** | — | [ниже](#гейт-после-v02) | 🚧 | 02 |
-| 02b | Дизайн «Сегодня» и «Журнал» + вечерняя запись | V0.2.1 | [02b-day-journal-design](./plans/02b-day-journal-design.md) | 🟡 | 02 |
-| 03 | **Активности: что делать, как делать, прогресс** | V0.3 | [03-strength](./plans/03-strength.md) | ⬜ | гейт |
-| 04 | Показатели, Energy KPI, Горизонт 80 | V0.4 | [04-metrics-horizon](./plans/04-metrics-horizon.md) | ⬜ | гейт |
-| 05 | Неделя, режимы, разгрузка, Weekly Review | V0.5 | [05-week-review](./plans/05-week-review.md) | 🟡 | 02b, 03 для quality |
-| 06 | Медицина: обследования, анализы | V0.6 | [06-medical](./plans/06-medical.md) | ⬜ | 04 (реестр) |
-| 07 | Справочник: план v6 внутри приложения | V0.7 | [07-reference](./plans/07-reference.md) | ⬜ | 00 |
-| 08 | Эксперименты N=1 | V0.8 | [08-experiments](./plans/08-experiments.md) | ⬜ | 04, 05 |
-| 09 | Импорт Garmin (опционально): файл одной активности → контрольная сессия | V0.9 | [09-garmin-import](./plans/09-garmin-import.md) | ⬜ | 03 |
+| 00 | Content v6: concepts and defaults | V0 | [00-content-v6](./plans/00-content-v6.md) | 🟡 | — |
+| 01 | Scaffold from ACT + privacy | V0.1 | [01-infrastructure](./plans/01-infrastructure.md) | ✅ | — |
+| 02 | **Today: check-in → traffic light → decision + simple week** | V0.2 | [02-today](./plans/02-today.md) | 🟡 | 00 (defaults), 01 |
+| — | **Gate: 2–3 weeks of own use** | — | [below](#gate-after-v02) | 🚧 | 02 |
+| 02b | Today and Journal design + evening entry | V0.2.1 | [02b-day-journal-design](./plans/02b-day-journal-design.md) | 🟡 | 02 |
+| 03 | **Activities: what to do, how to do it, progress** | V0.3 | [03-strength](./plans/03-strength.md) | ⬜ | gate |
+| 04 | Metrics, Energy KPI, Horizon 80 | V0.4 | [04-metrics-horizon](./plans/04-metrics-horizon.md) | ⬜ | gate |
+| 05 | Week, modes, deload, Weekly Review | V0.5 | [05-week-review](./plans/05-week-review.md) | 🟡 | 02b, 03 for quality |
+| 06 | Medicine: check-ups, lab results | V0.6 | [06-medical](./plans/06-medical.md) | ⬜ | 04 (registry) |
+| 07 | Reference: plan v6 inside the app | V0.7 | [07-reference](./plans/07-reference.md) | ⬜ | 00 |
+| 08 | N=1 experiments | V0.8 | [08-experiments](./plans/08-experiments.md) | ⬜ | 04, 05 |
+| 09 | Garmin import (optional): one activity file → benchmark session | V0.9 | [09-garmin-import](./plans/09-garmin-import.md) | ⬜ | 03 |
 
-Этапы 00 и 01 идут параллельно. Для кода блокирующая часть этапа 00 — только концепции и
-defaults (00.1–00.4), и она готова: [content/defaults.md](./content/defaults.md),
-[content/rules-v1.md](./content/rules-v1.md). Тексты справочника дописываются параллельно.
+Stages 00 and 01 run in parallel. The part of stage 00 that blocks code is only the concepts
+and defaults (00.1–00.4), and it is done: [content/defaults.md](./content/defaults.md),
+[content/rules-v1.md](./content/rules-v1.md). Reference texts are written in parallel.
 
-### Гейт после V0.2
+### Gate after V0.2
 
-Пользователь разрешил внедрить полученный дизайн 02b и экран недели из 05 до ~14 реальных
-дней чек-инов (D20). Сам гейт не пройден: перед изменением правил и развитием оставшихся
-этапов 03–09 сверяем реализацию с реальным использованием. По итогам
-отвечаем в [02-today → Итоги использования](./plans/02-today.md#итоги-использования):
+The user allowed the received 02b design and the week screen from 05 to ship before ~14 real
+days of check-ins (D20). The gate itself is not passed: before changing the rules or building
+the remaining stages 03–09, we check the implementation against real use. The answers go to
+[02-today → Итоги использования](./plans/02-today.md#итоги-использования):
 
-- чек-ин действительно ≤ 60 с? Какие поля пропускаются чаще всего?
-- хочется ли вводить HRV руками, нужен ли Sleep Score?
-- удобна ли энергия 1–10 утром и спокойствие вечером; меняют ли они что-то в решениях?
-- полезен ли итоговый светофор, часто ли `chosen ≠ recommended` и **почему**?
-- помогает ли «Сегодня» принять решение или только показывает информацию?
-- нужен ли признак «нагрузка вне тренировок: обычная / высокая» и меняет ли он решение?
-- сколько дней пришлось на болезнь, поездку, обострение или колено; чего не хватило при возвращении?
+- is the check-in really ≤ 60 s? Which fields are skipped most often?
+- is entering HRV by hand acceptable, is Sleep Score needed?
+- do morning energy 1–10 and evening calm work, do they change any decisions?
+- is the final traffic light useful, how often is `chosen ≠ recommended` and **why**?
+- does Today help make a decision or only show information?
+- is a "load outside training: normal / high" flag needed, does it change the decision?
+- how many days went to illness, travel, a flare-up or the knee; what was missing on return?
 
-Гейт не пропускаем ради работы над документацией: ответы важнее любой рамки. Планы 03–09
-окончательно дописываем уже с ними. Поменяли план — пишем об этом в журнал изменений этого плана.
+The gate is not skipped for documentation work: its answers matter more than any framework.
+Plans 03–09 are finalised with those answers. A changed plan gets an entry in its change log.
 
 ---
 
-## Документы
+## Documents
 
-| Документ | Что в нём |
+> Docs are being moved to English gradually (D28). The core is English: this file,
+> [architecture.md](./architecture.md), [content/](./content/), the [plan template](./plans/_template.md)
+> and `CLAUDE.md`. Stage plans and other docs stay Russian until their next substantive
+> revision (for 03–09 — the post-gate review): translation-only commit first, then the
+> content change. `concept-text.md` and the frozen `concept-plan.md` stay Russian for now.
+
+| Document | Contents |
 |---|---|
-| [concept-plan.md](./concept-plan.md) | Философия v1 (заморожена): модель, принципы, архитектурные требования к этапам |
-| [concept-review-status.md](./concept-review-status.md) | Сверка документов с философией v1: статус каждого пункта и что осталось |
-| [concept-text.md](./concept-text.md) | Развёрнутое обсуждение концепта — фон для concept-plan, не источник правил |
-| [content/](./content/) | Defaults (настройки, стартовые данные, targets, симптомы) и правила светофора — источник чисел для кода |
-| [first-deploy.md](./first-deploy.md) | Пошаговый первый деплой: Neon, Vercel, GitHub, проверка |
-| [backups.md](./backups.md) | Бэкапы на свою машину и восстановление |
-| [architecture.md](./architecture.md) | Сквозные концепции: 3 слоя, реестр показателей, provenance, baseline, светофор, единицы/время, targets, симптомы, приватность |
-| [plans/](./plans/) | План каждого этапа: чек-лист, шаги, запрос в Claude Design, журнал изменений |
-| [design/design_handoff_today_week_journal/](./design/design_handoff_today_week_journal/) | Хэндофф «Сегодня · Неделя · Журнал»; визуальный ориентир для 02b и 05 |
-| [plans/_template.md](./plans/_template.md) | Шаблон плана нового этапа |
-| Контент v5 | [Артефакт «Образ жизни 40 → 80»](https://claude.ai/artifact/8CsPWre4L1bnmqi4QPBj2G) |
-| Каркас | `../ACT` — источник инфраструктуры и компонентов |
+| [concept-plan.md](./concept-plan.md) | Philosophy v1 (frozen): model, principles, architectural requirements for stages |
+| [concept-review-status.md](./concept-review-status.md) | Docs vs philosophy v1: status of every point and what is left |
+| [concept-text.md](./concept-text.md) | Extended discussion of the concept — background for concept-plan, not a source of rules |
+| [content/](./content/) | Defaults (settings, starting data, targets, symptoms) and traffic-light rules — the source of numbers for code |
+| [first-deploy.md](./first-deploy.md) | Step-by-step first deploy: Neon, Vercel, GitHub, checks |
+| [backups.md](./backups.md) | Backups to the user's own machine and restore |
+| [architecture.md](./architecture.md) | Cross-cutting concepts: 3 layers, metric registry, provenance, baseline, traffic light, units/time, targets, symptoms, privacy, benchmark sessions |
+| [plans/](./plans/) | One plan per stage: checklist, steps, Claude Design request, change log |
+| [design/design_handoff_today_week_journal/](./design/design_handoff_today_week_journal/) | "Today · Week · Journal" handoff; visual reference for 02b and 05 |
+| [plans/_template.md](./plans/_template.md) | Template for a new stage plan |
+| Content v5 | [Artifact «Образ жизни 40 → 80»](https://claude.ai/artifact/8CsPWre4L1bnmqi4QPBj2G) |
+| Scaffold | `../ACT` — source of infrastructure and components |
 
 ---
 
-## Как работать с планами
+## Working with plans
 
-### Начало сессии
+### Session start
 
-1. Прочитать этот файл: статус этапов и журнал решений.
-2. Открыть план текущего этапа и найти **первый неотмеченный шаг** в чек-листе вверху.
-3. Перед кодом прочитать разделы плана «Цель» и «Скоуп», а также нужные разделы
+1. Read this file: stage status and the decision log.
+2. Open the current stage plan and find the **first unchecked step** in its checklist.
+3. Before coding, read the plan's goal and scope sections and the relevant sections of
    [architecture.md](./architecture.md).
 
-### Во время работы
+### While working
 
-- **Один шаг — один коммит**, сообщение `WOL-<этап>.<шаг> (feat|fix|docs): …`,
-  например `WOL-02.3 (feat): baseline engine`.
-- Шаг закончен → **отметить его `[x]` в чек-листе плана в том же коммите**. Если шаг
-  выполнен частично, не отмечать, а дописать под ним `↳ осталось: …`.
-- Реализация разошлась с планом → поправить текст плана и добавить строку в его
-  «Журнал изменений» (дата, что, почему). План описывает то, что есть и будет, а не
-  исходный замысел.
-- Решение затрагивает несколько этапов или архитектуру → обновить
-  [architecture.md](./architecture.md) и добавить запись в [журнал решений](#журнал-решений) ниже.
-- Появилась новая идея, не нужная для текущего шага → в [бэклог](#бэклог), а не в
-  чек-лист текущего этапа.
+- **One step — one commit**, message `WOL-<stage>.<step> (feat|fix|docs): …`,
+  e.g. `WOL-02.3 (feat): baseline engine`.
+- Step done → **check it `[x]` in the plan checklist in the same commit**. A partly done step
+  is not checked; add `↳ left: …` under it.
+- Implementation diverged from the plan → fix the plan text and add a row to its change log
+  (date, what, why). A plan describes what is and will be, not the original intent.
+- A decision affects several stages or the architecture → update
+  [architecture.md](./architecture.md) and add an entry to the [decision log](#decision-log) below.
+- A new idea not needed for the current step → [backlog](#backlog), not the current checklist.
 
-### Смена статуса этапа
+### Changing stage status
 
-- Взяли в работу первый шаг → 🟡 в таблице выше.
-- Отмечены все шаги и пройден раздел «Проверка» плана → ✅, дата в журнале изменений плана.
-- После каждого завершённого этапа пересмотреть чек-листы **следующих** этапов: что
-  устарело, что стало ясно. Это не бюрократия, а причина, по которой планы остаются правдой.
+- First step taken → 🟡 in the table above.
+- All steps checked and the plan's verification section passed → ✅, date in the plan's change log.
+- After each finished stage, review the checklists of the **next** stages: what is outdated,
+  what became clear. This is not bureaucracy; it is why plans stay true.
 
-### Запросы в Claude Design
+### Claude Design requests
 
-- В каждом плане есть раздел «Запрос в Claude Design» с указанием, **когда** его отправлять.
-- Хэндофф уже получен и по решению D20 реализуется в 02b и части 05 до гейта;
-  объём и критерии исходного V0.2 от этого не меняются.
-- Для новых запросов после гейта брать реализованные «Сегодня», «Неделю» и «Журнал»
-  как визуальный контекст. Сначала сверять запрос с итогами использования 02 и текущим
-  состоянием этапа; хэндофф — ориентир, а не источник правил или примерных данных.
-- После гейта запросы отправляем по мере необходимости. Хэндофф кладём в
-  `docs/design/<этап>/`, в план добавляем шаг «перенести дизайн из хэндоффа».
-- Иерархия источников: план этапа → architecture.md → реализованные экраны →
-  хэндофф как визуальный ориентир → токены `globals.css`.
+- Every plan has a Claude Design request section saying **when** to send it.
+- The handoff is already received and, per D20, is implemented in 02b and part of 05 before
+  the gate; the scope and criteria of the original V0.2 do not change.
+- For new requests after the gate, use the implemented Today, Week and Journal as visual
+  context. First check the request against the 02 usage results and the current state of the
+  stage; a handoff is a reference, not a source of rules or sample data.
+- After the gate, send requests as needed. Put the handoff in `docs/design/<stage>/` and add
+  a "move the design over from the handoff" step to the plan.
+- Source hierarchy: stage plan → architecture.md → implemented screens → handoff as visual
+  reference → `globals.css` tokens.
 
-### Новый этап
+### New stage
 
-Скопировать [plans/_template.md](./plans/_template.md), добавить строку в таблицу статусов
-и запись в журнал решений, если этап меняет архитектуру. Раздел шаблона «Связь с моделью»
-заполнять до шагов: если этап не меняет ни одного решения ни на одном горизонте, его скоуп
-стоит пересмотреть.
+Copy [plans/_template.md](./plans/_template.md), add a row to the status table and a
+decision-log entry if the stage changes the architecture. Fill in the template's "Link to the
+model" section before the steps: if the stage changes no decision on any horizon, reconsider
+its scope.
 
 ---
 
-## Журнал решений
+## Decision log
 
-| # | Дата | Решение | Почему |
+| # | Date | Decision | Why |
 |---|---|---|---|
-| D1 | 28.09.2026 | Отдельный репозиторий `Way of Life`, не раздел ACT | Разные центры тяжести: ACT — поведение и рефлексия, Way of Life — физиология → состояние → решение → резерв |
-| D2 | 28.09.2026 | Инфраструктуру ACT копируем, ACT-домен удаляем. Общий пакет `packages/{auth,db,ui}` — только при третьем приложении | Не строить общую архитектуру раньше реального переиспользования |
-| D3 | 28.09.2026 | Только русский, инфраструктуру next-intl оставляем | Один пользователь; каталог сообщений удобен как структура |
-| D4 | 28.09.2026 | До гейта — компоненты ACT без дизайн-проекта; Claude Design после 2–3 недель использования | Узкое место сейчас не красота, а то, какие экраны действительно главные |
-| D5 | 28.09.2026 | Вертикальный срез V0.2 до всего остального, затем гейт | Проверить ≤ 60 с и полезность светофора на живых данных |
-| D6 | 28.09.2026 | Наблюдение → интерпретация → решение; решение хранится с `rule_version` и `snapshot` | Правила будут меняться, история не должна врать |
-| D7 | 28.09.2026 | Светофор с `UNKNOWN`, без итогового score, по худшему сигналу | Честнее и объяснимо |
-| D8 | 28.09.2026 | Реестр показателей в коде + типизированные таблицы + одна `measurements`; без EAV | Гибкость без EAV-кошмара |
-| D9 | 28.09.2026 | Режим — поле `mode`, сущность Plans/Protocols отложена | Пока режимы не меняют шаблон, отдельная сущность — преждевременна |
-| D10 | 28.09.2026 | Справочник — файлы в репозитории (MDX/TS) с frontmatter-связями (`metrics`, `functions`), не таблица `knowledge_articles` | Один автор, контент версионируется git; связи дают те же ссылки для System Map |
-| D11 | 28.09.2026 | Симптомы — отдельная сущность (definitions + entries) | Не раздувать чек-ин колонками |
-| D12 | 28.09.2026 | Энергия — самостоятельный показатель: утро обязательно, днём опционально (после гейта) | Прямо отвечает исходной цели «энергия» |
-| D13 | 28.09.2026 | LTHR = 165, зоны пересчитаны: Z2 140–151, Z4 158–165 | Ответ пользователя; тест 21.10 уточнит |
-| D14 | 28.09.2026 | Стартовый baseline RHR = 48, пороги от него (≤ 51 / 52–54 / ≥ 55 два дня); абсолютные ≤ 54 из v5 отменены | Реальная медиана 48: старые пороги не заметили бы +6 |
-| D15 | 28.09.2026 | Перебои в покое — жёлтый сигнал «сегодня без интенсивной» + симптом для корреляций со сном и болезнью; добавлен симптом «признаки болезни» → красный | Перебои связаны с недосыпом, болезнью и стрессом, а не с нагрузкой |
-| D16 | 28.09.2026 | Проект называется **Way of Life** (`way-of-life`, БД и роли `way_of_life*`, коммиты `WOL-…`) | Решение пользователя; Vercel-проект `way-of-life` |
-| D17 | 28.09.2026 | Бэкапы: PITR Neon + `pnpm db:backup` на машину пользователя (`~/way_of_life/backups`), без облачного хранилища дампов | Данные о здоровье не копируются в третьи сервисы |
-| D18 | 28.09.2026 | Production-БД — отдельный проект Neon (не база в проекте ACT); PostgreSQL 18 локально, в CI и в Neon | Изоляция медицинских данных; одна мажорная версия для дампов (Neon создал проект на 18) |
-| D19 | 29.09.2026 | Полученный раньше срока из D4 хэндофф «Сегодня · Неделя · Журнал» внедрять после проверки V0.2: «Сегодня» и «Журнал» в 02b, «Неделю» в 05 | Дизайн добавляет вечерние данные и функции 05; не задерживать запуск гейта и сохранить владельца бизнес-правил за планами |
-| D20 | 29.09.2026 | По прямому запросу пользователя внедрить дизайн 02b и экран «Неделя» из 05 сейчас; гейт использования оставить открытым, остальные шаги 05 и этапы 03–09 оценить после него | Дизайн готов, а пользователь выбрал раннюю реализацию; визуальный хэндофф не меняет правила светофора и targets |
-| D21 | 30.09.2026 | Этап 03 — общий экран «Активности» с вкладками бега, силовой, движения, ходьбы/трекинга; быстрая ручная сводка сейчас, импорт Garmin в 09; прогресс по функции и регулярности важнее спортивного результата | Пользователю нужны указания «что/как делать» и долгосрочная картина движения без копии Garmin |
-| D22 | 30.09.2026 | Философия v1 заморожена ([concept-plan.md](./concept-plan.md)): одна иерархия «функция → Capacity/Vitality/Risk → главный ограничитель → minimum/target/optional», 10 принципов. У показателя одна основная ось (`axis` в реестре). Для доз — `minimum / target / optional`, слово floor не используем | Два круга обсуждения дали модель; дальше учимся на использовании, а не на новых рамках |
-| D23 | 30.09.2026 | Точка сравнения зависит от типа показателя: носимые сигналы — личный baseline, маркеры риска (давление, липиды, HbA1c, талия) — клинические ориентиры и собственный тренд. Закон 1 в architecture.md уточнён | «Сравниваем с собой» для ApoB или давления вводит в заблуждение |
-| D24 | 30.09.2026 | Garmin опционален. Всё вводится руками; сон, RHR и HRV — по желанию, не обязательно каждый день. Импорт читает файл одной активности, забирает значения и не хранит файл. Главный сценарий импорта — контрольные сессии (лёгкий/easy/темп/порог/4×4, походы) для сравнения темпа и пульса во времени (architecture §4, §11) | Решение пользователя; прогресс виден по повторяемому протоколу, а не по ежедневной копии Garmin |
-| D25 | 30.09.2026 | Решение дня окончательно в конце локального дня: до этого чек-ин и выбор можно менять, вечерняя запись фиксирует, чем день закончился; прошлые дни не пересчитываются (architecture §2) | Решение пользователя: оценивать вечером, когда понятно, чем день закончился |
-| D26 | 30.09.2026 | Энергия — шкала 1–10, как RPE (ответы 1–5 пересчитаны ×2, `RULES_VERSION` 1.1). Вечером — «спокойствие за день»: сильно раздражался / раздражителен / норма / спокоен / позитивен. Оба показываются, в светофор не входят | Запрос пользователя: 1–5 слишком грубо; психическое состояние — часть Vitality |
-| D27 | 30.09.2026 | Пропущенный или неполный день можно дописать 7 дней: модалка из журнала и недели (утро, активности, вечер). Решение того дня не пересчитывается и не создаётся; журнал показывает вердикт по текущим правилам с пометкой «заполнено позже» (architecture §2) | Запрос пользователя: пропущенный день не должен навсегда остаться дырой; история решений при этом не переписывается |
+| D1 | 28.09.2026 | A separate `Way of Life` repository, not a section of ACT | Different centres of gravity: ACT is behaviour and reflection, Way of Life is physiology → state → decision → reserve |
+| D2 | 28.09.2026 | Copy ACT infrastructure, remove the ACT domain. A shared `packages/{auth,db,ui}` only with a third app | Don't build shared architecture before real reuse |
+| D3 | 28.09.2026 | UI in Russian only, keep the next-intl infrastructure | One user; a message catalogue is a convenient structure |
+| D4 | 28.09.2026 | Until the gate — ACT components without a design project; Claude Design after 2–3 weeks of use | The bottleneck now is not looks but which screens really matter |
+| D5 | 28.09.2026 | Vertical slice V0.2 before everything else, then the gate | Check ≤ 60 s and traffic-light usefulness on live data |
+| D6 | 28.09.2026 | Observation → interpretation → decision; a decision is stored with `rule_version` and `snapshot` | Rules will change, history must not lie |
+| D7 | 28.09.2026 | Traffic light with `UNKNOWN`, no overall score, by the worst signal | More honest and explainable |
+| D8 | 28.09.2026 | Metric registry in code + typed tables + one `measurements` table; no EAV | Flexibility without the EAV nightmare |
+| D9 | 28.09.2026 | Mode is a `mode` field; a Plans/Protocols entity is postponed | While modes don't change the template, a separate entity is premature |
+| D10 | 28.09.2026 | Reference content as repo files (MDX/TS) with frontmatter links (`metrics`, `functions`), not a `knowledge_articles` table | One author, content versioned in git; links give the same references for the System Map |
+| D11 | 28.09.2026 | Symptoms are a separate entity (definitions + entries) | Don't bloat the check-in with columns |
+| D12 | 28.09.2026 | Energy is a metric of its own: morning required, daytime optional (after the gate) | Directly answers the original "energy" goal |
+| D13 | 28.09.2026 | LTHR = 165, zones recalculated: Z2 140–151, Z4 158–165 | User's answer; the 21.10 test will refine it |
+| D14 | 28.09.2026 | Starting RHR baseline = 48, thresholds from it (≤ 51 / 52–54 / ≥ 55 two days); absolute ≤ 54 from v5 dropped | Real median is 48: the old thresholds would miss +6 |
+| D15 | 28.09.2026 | Palpitations at rest — a yellow signal "no intensity today" + a symptom for correlation with sleep and illness; added a "signs of illness" symptom → red | Palpitations relate to short sleep, illness and stress, not to load |
+| D16 | 28.09.2026 | The project is called **Way of Life** (`way-of-life`, DB and roles `way_of_life*`, commits `WOL-…`) | User's decision; Vercel project `way-of-life` |
+| D17 | 28.09.2026 | Backups: Neon PITR + `pnpm db:backup` to the user's machine (`~/way_of_life/backups`), no cloud storage for dumps | Health data is not copied to third-party services |
+| D18 | 28.09.2026 | Production DB is a separate Neon project (not a DB inside the ACT project); PostgreSQL 18 locally, in CI and in Neon | Isolation of medical data; one major version for dumps (Neon created the project on 18) |
+| D19 | 29.09.2026 | The "Today · Week · Journal" handoff, received earlier than D4 planned, is implemented after V0.2 is checked: Today and Journal in 02b, Week in 05 | The design adds evening data and 05 features; don't delay the gate and keep business rules owned by the plans |
+| D20 | 29.09.2026 | At the user's direct request, implement the 02b design and the Week screen from 05 now; the usage gate stays open, the rest of 05 and stages 03–09 are assessed after it | The design is ready and the user chose early implementation; a visual handoff does not change traffic-light rules or targets |
+| D21 | 30.09.2026 | Stage 03 is a single Activities screen with running, strength, movement and walking/trekking tabs; a quick manual summary now, Garmin import in 09; progress in function and regularity matters more than sports results | The user needs "what/how to do" guidance and a long-term picture of movement without a Garmin copy |
+| D22 | 30.09.2026 | Philosophy v1 frozen ([concept-plan.md](./concept-plan.md)): one hierarchy "function → Capacity/Vitality/Risk → main bottleneck → minimum/target/optional", 10 principles. Each metric has one primary axis (`axis` in the registry). Doses are `minimum / target / optional`; the word floor is not used | Two rounds of discussion produced the model; from here we learn from use, not from new frameworks |
+| D23 | 30.09.2026 | The reference point depends on the metric type: wearable signals — personal baseline; risk markers (blood pressure, lipids, HbA1c, waist) — clinical references and one's own trend. Law 1 in architecture.md refined | "Compare with yourself" is misleading for ApoB or blood pressure |
+| D24 | 30.09.2026 | Garmin is optional. Everything is entered by hand; sleep, RHR and HRV are optional and not necessarily daily. Import reads one activity file, extracts the values and does not keep the file. The main import scenario is benchmark sessions (recovery/easy/tempo/threshold/4×4, hikes) to compare pace and heart rate over time (architecture §4, §11) | User's decision; progress shows in a repeatable protocol, not in a daily Garmin copy |
+| D25 | 30.09.2026 | The day decision is final at the end of the local day: until then the check-in and the choice can change, the evening entry records how the day ended; past days are not recomputed (architecture §2) | User's decision: judge in the evening, when it is clear how the day went |
+| D26 | 30.09.2026 | Energy is a 1–10 scale, like RPE (1–5 answers multiplied by 2, `RULES_VERSION` 1.1). In the evening — "calm over the day": «сильно раздражался / раздражителен / норма / спокоен / позитивен». Both are shown and not part of the traffic light | User's request: 1–5 was too coarse; mental state is part of Vitality |
+| D27 | 30.09.2026 | A missed or incomplete day can be filled in for 7 days: a dialog from Journal and Week (morning, activities, evening). That day's decision is not recomputed or created; Journal shows a current-rules verdict marked «заполнено позже» (architecture §2) | User's request: a missed day should not stay a hole forever; decision history is still not rewritten |
+| D28 | 01.10.2026 | Docs, code comments and commits are in English; the UI stays Russian (D3) and literal UI strings are quoted in Russian; the assistant talks to the user in Russian. Translation is gradual: core docs now, the rest at their next substantive revision (rules in `CLAUDE.md`) | Russian text costs noticeably more tokens in every session; a gradual move avoids a huge diff and mixing language with meaning changes |
 
 ---
 
-## Бэклог
+## Backlog
 
-Идеи без этапа. При планировании этапа переносим подходящие пункты в его план.
+Ideas without a stage. When planning a stage, move the relevant items into its plan.
 
-- Медицинские документы (МРТ, УЗИ, ЭКГ, холтер) с привязкой к обследованиям и анализам — приватное хранилище
-- Граф связей System Map: статья ↔ показатель ↔ тренировка ↔ функция в 80
-- Сущность Plans/Protocols (winter, подготовка к забегу), если режимов-периодов с протоколами возвращения станет мало
-- Импорт дневных метрик Garmin (сон, RHR, HRV) — только если гейт покажет, что ручной ввод главный раздражитель (D24)
-- Дневная отметка энергии в 14:00 (push/напоминание)
-- Общий пакет инфраструктуры с ACT (при третьем приложении)
-- Автоматический главный ограничитель — только после накопления истории; до этого вручную в Weekly Review
-- Мягкая связь «функция Горизонта → ценность ACT»
-- MFA: passkey или TOTP
-- Периодический restore-тест бэкапа в чистую БД (первый пройден 28.09.2026, [backups.md](./backups.md))
+- Medical documents (MRI, ultrasound, ECG, Holter) linked to check-ups and lab results — private storage
+- System Map link graph: article ↔ metric ↔ workout ↔ function at 80
+- A Plans/Protocols entity (winter, race preparation) if mode periods with return protocols are not enough
+- Garmin daily-metric import (sleep, RHR, HRV) — only if the gate shows manual entry is the main irritant (D24)
+- Daytime energy mark at 14:00 (push/reminder)
+- Shared infrastructure package with ACT (with a third app)
+- Automatic main bottleneck — only once there is enough history; until then manually in the Weekly Review
+- Soft link "Horizon function → ACT value"
+- MFA: passkey or TOTP
+- Periodic backup restore test into a clean DB (first one passed on 28.09.2026, [backups.md](./backups.md))
 
 ---
 
-## Открытые вопросы
+## Open questions
 
-- [x] LTHR → **165** (D13), уточнить тестом 21.10
-- [x] Сон за 4 недели → 6:55 в среднем, Score 84, RHR 48 ([defaults.md](./content/defaults.md))
-- [x] Шаги в рабочий день → 8–12 тыс.
-- [x] Перебои → редко, в покое, на фоне болезни, недосыпа или стресса; с нагрузкой не связаны (D15)
-- [ ] HRV: статус и среднее ночное за 4 недели
-- [ ] Отбой и подъём (не блокирует)
-- [ ] Часы за компьютером в день (не блокирует)
+- [x] LTHR → **165** (D13), refine with the 21.10 test
+- [x] Sleep over 4 weeks → 6:55 average, Score 84, RHR 48 ([defaults.md](./content/defaults.md))
+- [x] Steps on a work day → 8–12 k
+- [x] Palpitations → rare, at rest, with illness, short sleep or stress; not related to load (D15)
+- [ ] HRV: status and average nightly HRV over 4 weeks
+- [ ] Bedtime and wake time (not blocking)
+- [ ] Hours at the computer per day (not blocking)

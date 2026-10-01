@@ -55,7 +55,7 @@
 
 ### 01.8 — Приватность
 
-По [architecture §10](../architecture.md#10-приватность-и-безопасность): `src/lib/log.ts`
+По [architecture §10](../architecture.md#10-privacy-and-security): `src/lib/log.ts`
 с whitelist полей; biome-правило или CI-grep против `console.` в `src/`; headers
 (`X-Frame-Options`, `Referrer-Policy`, CSP по возможности); никаких analytics.
 
