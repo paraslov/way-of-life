@@ -109,9 +109,28 @@ describe("summarizeWeek", () => {
     expect(line(summary, "mobility.sessions")?.fact).toBe(1);
   });
 
-  it("counts past days without training as rest, today only when logged", () => {
-    // Wednesday had no training; today (Thursday) has no «rest» entry.
-    expect(line(summary, "rest.days")?.fact).toBe(1);
+  it("does not count a day without entries as rest", () => {
+    // Wednesday has no entries at all: missing data, not a rest day.
+    expect(line(summary, "rest.days")?.fact).toBe(0);
+  });
+
+  it("counts an explicit rest mark on a day without training", () => {
+    const rested = summarizeWeek({
+      today: TODAY,
+      targets: TARGETS,
+      order: ORDER,
+      activities: [
+        { local_date: "2026-10-20", type: "rest", duration_min: null },
+        { local_date: "2026-10-20", type: "walk_after_meal", duration_min: 20 },
+        // Marked rest but trained anyway: not a rest day.
+        { local_date: "2026-10-21", type: "rest", duration_min: null },
+        { local_date: "2026-10-21", type: "easy_run", duration_min: 30 },
+        { local_date: "2026-10-22", type: "rest", duration_min: null },
+      ],
+      days: [],
+      verdicts: [],
+    });
+    expect(line(rested, "rest.days")?.fact).toBe(2);
   });
 
   it("averages daily metrics over days with a value", () => {

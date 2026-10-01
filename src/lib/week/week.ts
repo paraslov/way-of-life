@@ -155,14 +155,15 @@ function fact(
         .filter((a) => AEROBIC.includes(a.type))
         .reduce((sum, a) => sum + (a.duration_min ?? 0), 0);
     case "rest.days": {
-      // A past day without training is a rest day; today only once logged.
+      // Rest is an explicit mark on a day without training; a day with no
+      // entries is missing data, not rest (architecture §8). A missed day can
+      // be filled in from the journal (D27).
       let count = 0;
       for (let day = start; day <= today; day = shiftId(day, 1)) {
         const onDay = activities.filter((a) => a.local_date === day);
         const rested =
-          day === today
-            ? onDay.some((a) => a.type === "rest")
-            : !onDay.some((a) => TRAINING.includes(a.type));
+          onDay.some((a) => a.type === "rest") &&
+          !onDay.some((a) => TRAINING.includes(a.type));
         if (rested) count += 1;
       }
       return count;
